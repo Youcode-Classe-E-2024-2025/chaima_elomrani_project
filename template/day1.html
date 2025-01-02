@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProManage - Projects</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --accent-primary: #3c366b;
+            --accent-secondary: #4c51bf;
+            --accent-tertiary: #667eea;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #e53e3e;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            background-color: var(--bg-secondary);
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-primary);
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-menu-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .user-menu-content {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: var(--bg-secondary);
+            box-shadow: var(--shadow);
+            border-radius: 5px;
+            padding: 0.5rem 0;
+            min-width: 150px;
+            display: none;
+        }
+
+        .user-menu-content a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-menu-content a:hover {
+            background-color: var(--bg-primary);
+        }
+
+        main {
+            padding-top: 5rem;
+        }
+
+        .projects-header {
+            background-color: var(--bg-secondary);
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .projects-title {
+            font-size: 2rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .projects-subtitle {
+            color: var(--text-secondary);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background-color: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .project-card h3 {
+            font-size: 1.25rem;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+
+        .project-card-content {
+            margin-bottom: 1rem;
+        }
+
+        .project-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+
+        .status-active {
+            background-color: var(--success);
+            color: var(--bg-secondary);
+        }
+
+        .status-completed {
+            background-color: var(--accent-tertiary);
+            color: var(--bg-secondary);
+        }
+
+        .status-on-hold {
+            background-color: var(--warning);
+            color: var(--bg-secondary);
+        }
+
+        .project-members {
+            display: flex;
+        }
+
+        .project-member {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--accent-tertiary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: -10px;
+        }
+
+        .project-member:first-child {
+            margin-left: 0;
+        }
+
+        .project-progress {
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--bg-primary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent-secondary);
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .projects-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container nav-container">
+            <a href="dashboard.html" class="logo">ProManage</a>
+            <div class="nav-links">
+                <a href="my-tasks.html">My Tasks</a>
+                <a href="projects.html" class="active">Projects</a>
+                <a href="create-project.html">Create Project</a>
+            </div>
+            <div class="user-menu">
+                <button class="user-menu-btn">
+                    <i class="fas fa-user-circle"></i>
+                    <span>John Doe</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="user-menu-content">
+                    <a href="#"><i class="fas fa-user"></i> Profile</a>
+                    <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="projects-header">
+            <div class="container">
+                <h1 class="projects-title">Projects</h1>
+                <p class="projects-subtitle">View and manage all your ongoing and completed projects.</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="projects-grid">
+                <div class="project-card">
+                    <h3>E-commerce Platform Redesign</h3>
+                    <div class="project-card-content">
+                        <p>Redesigning the user interface and improving the overall user experience of our e-commerce platform.</p>
+                    </div>
+                    <div class="project-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 75%;"></div>
+                        </div>
+                    </div>
+                    <div class="project-card-footer">
+                        <span class="project-status status-active">Active</span>
+                        <div class="project-members">
+                            <div class="project-member">JD</div>
+                            <div class="project-member">AS</div>
+                            <div class="project-member">MK</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>Mobile App Development</h3>
+                    <div class="project-card-content">
+                        <p>Creating a new mobile app for iOS and Android platforms to complement our web services.</p>
+                    </div>
+                    <div class="project-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 40%;"></div>
+                        </div>
+                    </div>
+                    <div class="project-card-footer">
+                        <span class="project-status status-active">Active</span>
+                        <div class="project-members">
+                            <div class="project-member">RB</div>
+                            <div class="project-member">LM</div>
+                            <div class="project-member">TK</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>Customer Support Portal</h3>
+                    <div class="project-card-content">
+                        <p>Developing a comprehensive customer support portal to streamline support requests and improve response times.</p>
+                    </div>
+                    <div class="project-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="project-card-footer">
+                        <span class="project-status status-completed">Completed</span>
+                        <div class="project-members">
+                            <div class="project-member">EW</div>
+                            <div class="project-member">DM</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3>Data Analytics Dashboard</h3>
+                    <div class="project-card-content">
+                        <p>Creating an interactive dashboard for visualizing and analyzing key business metrics and performance indicators.</p>
+                    </div>
+                    <div class="project-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                    <div class="project-card-footer">
+                        <span class="project-status status-on-hold">On Hold</span>
+                        <div class="project-members">
+                            <div class="project-member">SL</div>
+                            <div class="project-member">JW</div>
+                            <div class="project-member">AK</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // User menu toggle
+        const userMenuBtn = document.querySelector('.user-menu-btn');
+        const userMenuContent = document.querySelector('.user-menu-content');
+
+        userMenuBtn.addEventListener('click', () => {
+            userMenuContent.style.display = userMenuContent.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('.user-menu')) {
+                userMenuContent.style.display = 'none';
+            }
+        });
+
+        // Animate project cards on scroll
+        const projectCards = document.querySelectorAll('.project-card');
+
+        const animateOnScroll = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        const options = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver(animateOnScroll, options);
+
+        projectCards.forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
+
