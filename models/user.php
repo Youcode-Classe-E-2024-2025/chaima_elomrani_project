@@ -80,6 +80,60 @@ class User {
             return "Database error: " . $e->getMessage();
         }
     }
-    
+    public function login(){
+
+        if(!$this ->validateInput()) {
+            return[
+                "status" => "error",
+                "message" => "Entrées invalides. Veuillez vérifier vos informations."
+            ];
+
+        }
+
+        $query = "SELECT id , email , password , role FROM" . $this->table . "WHERE email = :email LIMIT 1";
+        $stmt = $this->conn->prepare($query);
+
+        $stmt ->bindParam(':email', $this->email);
+
+        try{
+            $stmt->execute();
+
+            // verify if user exists 
+            if( $stmt->rowCount() > 0) {
+                $user = $stmt ->fetch(PDO::FETCH_ASSOC);
+
+                if(password_verify($this->password, $user['password'])){
+                    return [
+                    'status' => "success",
+                    'message' => 'connexion reussie',
+                        'user' =>[
+                            "id"=> $user["id"],
+                            "email"=> $user["email"],
+                            "role" => $user["role"],
+                        ],
+
+                    ];
+
+            }  else {
+                return [
+                    "status"=> "error",
+                    "message"=> "mot de passe incorect"
+                ];
+            }  
+        }else{
+            return [
+                "status"=> "error",
+                "message"=> "email introuvable"
+            ];
+        }
+
+    }catch (PDOException $e) {
+        error_log("erreur survenue lors de la connexion". $e->getMessage());
+        return [
+            "status" => "error",
+            "message"=> $e->getMessage()
+        ];
+    }
+}
 }
 ?>

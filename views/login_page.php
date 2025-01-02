@@ -14,7 +14,7 @@
             <h1>Welcome Back</h1>
             <p>Log in to your ProManage account</p>
         </div>
-        <form class="login-form">
+        <form class="login-form" action="../controllers/login_controller.php" method="POST">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
@@ -23,6 +23,17 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
             </div>
+            <?php 
+            session_start();
+            if(isset($_SESSION['success_message'])) {
+                echo '<div class="success-message">' . htmlspecialchars($_SESSION['success_message']) . '</div>';
+                unset($_SESSION['success_message']);
+            }
+            if(isset($_SESSION['login_error'])) {
+                echo '<div class="error-message">' . htmlspecialchars($_SESSION['login_error']) . '</div>';
+                unset($_SESSION['login_error']);
+            }
+            ?>
             <button type="submit" class="login-btn">Log In</button>
         </form>
         <div class="forgot-password">
@@ -34,12 +45,7 @@
     </div>
 
     <script>
-        document.querySelector('.login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // Add your login logic here
-            console.log('Login form submitted');
-        });
+        // Removed event listener to allow form submission
     </script>
 </body>
 </html>
-

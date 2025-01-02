@@ -11,8 +11,8 @@ $password = "";
 $errors = [];
 
 // Initialize database connection
-$db = new Connexion(); 
-$conn = $db->getconnexion(); 
+$database = new Connexion();
+$connexion = $database->getconnexion();
 
 // Handle signup request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         try {
             // Create user object
-            $user = new User($conn);
+            $user = new User($connexion);
 
             // Set user properties
             $user->name = $name;
