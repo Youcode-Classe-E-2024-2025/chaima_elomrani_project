@@ -1,5 +1,10 @@
+<?php
+include("../controllers/projects_controller.php");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,7 +74,8 @@
             transition: color 0.3s ease;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--accent-primary);
         }
 
@@ -221,8 +227,9 @@
         }
     </style>
 </head>
+
 <body>
-<nav>
+    <nav>
         <div class="container nav-container">
             <div class="logo">ProManage</div>
             <div class="nav-links">
@@ -234,13 +241,13 @@
             <div class="user-menu">
                 <button class="user-menu-btn">
                     <i class="fas fa-user-circle"></i>
-               
+
                     <i class="fas fa-chevron-down"></i>
                 </button>
                 <div class="user-menu-content">
                     <a href="#"><i class="fas fa-user"></i> Profile</a>
                     <a href="#"><i class="fas fa-cog"></i> Settings</a>
-                    <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a href="home.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </div>
             </div>
         </div>
@@ -255,61 +262,17 @@
 
         <div class="container">
             <div class="projects-grid">
-                <div class="project-card">
-                    <h3>E-commerce Platform Redesign</h3>
-                    <div class="project-card-content">
-                        <p>Redesigning the user interface and improving the overall user experience of our e-commerce platform.</p>
-                    </div>
-                    <div class="project-card-footer">
-                        <span class="project-status status-active">Active</span>
-                        <div class="project-members">
-                            <div class="project-member">JD</div>
-                            <div class="project-member">AS</div>
-                            <div class="project-member">MK</div>
+                <?php foreach ($projects as $project): ?>
+                    <div class="project-card">
+                        <h3><?= htmlspecialchars($project['name']) ?></h3>
+                        <div class="project-card-content">
+                            <p><?= htmlspecialchars($project['description']) ?></p>
+                        </div>
+                        <div class="project-card-footer">
+                          <span class="project-status"> created in: <?= htmlspecialchars($project['created_date']) ?></span>
                         </div>
                     </div>
-                </div>
-                <div class="project-card">
-                    <h3>Mobile App Development</h3>
-                    <div class="project-card-content">
-                        <p>Creating a new mobile app for iOS and Android platforms to complement our web services.</p>
-                    </div>
-                    <div class="project-card-footer">
-                        <span class="project-status status-active">Active</span>
-                        <div class="project-members">
-                            <div class="project-member">RB</div>
-                            <div class="project-member">LM</div>
-                            <div class="project-member">TK</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <h3>Customer Support Portal</h3>
-                    <div class="project-card-content">
-                        <p>Developing a comprehensive customer support portal to streamline support requests and improve response times.</p>
-                    </div>
-                    <div class="project-card-footer">
-                        <span class="project-status status-completed">Completed</span>
-                        <div class="project-members">
-                            <div class="project-member">EW</div>
-                            <div class="project-member">DM</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="project-card">
-                    <h3>Data Analytics Dashboard</h3>
-                    <div class="project-card-content">
-                        <p>Creating an interactive dashboard for visualizing and analyzing key business metrics and performance indicators.</p>
-                    </div>
-                    <div class="project-card-footer">
-                        <span class="project-status status-on-hold">On Hold</span>
-                        <div class="project-members">
-                            <div class="project-member">SL</div>
-                            <div class="project-member">JW</div>
-                            <div class="project-member">AK</div>
-                        </div>
-                    </div>
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </main>
@@ -358,4 +321,5 @@
         });
     </script>
 </body>
+
 </html>

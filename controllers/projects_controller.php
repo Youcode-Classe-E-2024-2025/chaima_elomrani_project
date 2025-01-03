@@ -1,28 +1,34 @@
 <?php
-session_start();
 include("../config/connexion.php");
 
-if(!isset($_SESSION['user'])){
-    header("Location:login_page.php");
+class ViewProjects {
+    private $conn;
 
-    exit();
+    public function __construct($host, $username, $password, $dbname) {
+        $this->conn = new mysqli($host, $username, $password, $dbname);
+
+        if ($this->conn->connect_error) {
+            die("Connection failed: " . $this->conn->connect_error);
+        }
+    }
+
+    public function displayProjects() {
+        $sql = "SELECT name, description, created_date , due_date FROM projects"; // Correction : 'decription' devient 'description'
+        $result = $this->conn->query($sql);
+
+        if ($result) {
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            return [];
+        }
+    }
+
+    public function __destruct() {
+        $this->conn->close();
+    }
 }
 
-$database = new Connexion();
-$conn = $database -> getconnexion();
+// Instanciation de la classe et affichage des projets
+$db = new ViewProjects('localhost', 'root', '', 'project_management');
+$projects = $db->displayProjects();
 
-try{
-    $userID =$_SESSION['user']['id'];
-    $query = "SELECT * FROM projects WHERE user_id = :user_id";
-
-    $stmt = $conn ->prepare($query);
-    $stmt ->bindParam(':user_id', $userID, PDO::PARAM_INT);
-    $stmt -> execute();
-    $projects = $stmt ->fetchAll(PDO::FETCH_ASSOC);
-
-}catch(PDOException $e){
-    $projects= [];
-    error_log("makhedamch hadchi:" $e->getMessage());
-}
-
-?>

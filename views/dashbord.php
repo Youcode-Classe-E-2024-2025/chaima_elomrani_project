@@ -230,7 +230,7 @@
         <div class="container nav-container">
             <div class="logo">ProManage</div>
             <div class="nav-links">
-                <a href="home.php">Home</a>
+                <a href="admin_home.php">Home</a>
                 <a href="dashbord.php">Dashboard</a>
                 <a href="all_projects.php">All Projects</a>
                 <a href="creat_project.php" class="active">Create Project</a>
@@ -238,13 +238,12 @@
             <div class="user-menu">
                 <button class="user-menu-btn">
                     <i class="fas fa-user-circle"></i>
-                    <span>John Doe</span>
                     <i class="fas fa-chevron-down"></i>
                 </button>
                 <div class="user-menu-content">
                     <a href="#"><i class="fas fa-user"></i> Profile</a>
                     <a href="#"><i class="fas fa-cog"></i> Settings</a>
-                    <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a href="home.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </div>
             </div>
         </div>

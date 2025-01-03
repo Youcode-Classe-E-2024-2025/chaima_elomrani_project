@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProManage - Professional Project Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/home.css">
-  
+
 </head>
+
 <body>
     <style>
-         .user-menu-btn {
+        .user-menu-btn {
             background: none;
             border: none;
             cursor: pointer;
@@ -43,9 +45,8 @@
         .user-menu-content a:hover {
             background-color: var(--bg-primary);
         }
-
     </style>
-<nav>
+    <nav>
         <div class="container nav-container">
             <div class="logo">ProManage</div>
             <div class="nav-links">
@@ -62,7 +63,7 @@
                 <div class="user-menu-content">
                     <a href="#"><i class="fas fa-user"></i> Profile</a>
                     <a href="#"><i class="fas fa-cog"></i> Settings</a>
-                    <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a href="home.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </div>
             </div>
         </div>
@@ -186,7 +187,7 @@
 
     <script>
         // ****************user_menue******************************
-             const userMenuBtn = document.querySelector('.user-menu-btn');
+        const userMenuBtn = document.querySelector('.user-menu-btn');
         const userMenuContent = document.querySelector('.user-menu-content');
 
         userMenuBtn.addEventListener('click', () => {
@@ -246,5 +247,5 @@
         });
     </script>
 </body>
-</html>
 
+</html>
