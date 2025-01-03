@@ -230,9 +230,9 @@
         <div class="container nav-container">
             <div class="logo">ProManage</div>
             <div class="nav-links">
+                <a href="home.php">Home</a>
                 <a href="dashbord.php">Dashboard</a>
-                <a href="first_page.php">All Projects</a>
-                <a href="mytasks.php">My Tasks</a>
+                <a href="all_projects.php">All Projects</a>
                 <a href="creat_project.php" class="active">Create Project</a>
             </div>
             <div class="user-menu">
@@ -305,7 +305,7 @@
         document.addEventListener('click', (event) => {
             if (!event.target.closest('.user-menu')) {
                 userMenuContent.style.display = 'none';
-            }
+            } 
         });
 
         // Activity Chart

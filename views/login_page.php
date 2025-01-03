@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +28,6 @@
                 <input type="password" id="password" name="password" required>
             </div>
             <?php 
-            session_start();
             if(isset($_SESSION['success_message'])) {
                 echo '<div class="success-message">' . htmlspecialchars($_SESSION['success_message']) . '</div>';
                 unset($_SESSION['success_message']);
@@ -37,15 +40,13 @@
             <button type="submit" class="login-btn">Log In</button>
         </form>
         <div class="forgot-password">
-            <a href="#">Forgot your password?</a>
+                <a href="#">Forgot your password?</a>
         </div>
         <div class="signup-link">
             <p>Don't have an account? <a href="signup.php">Sign up</a></p>
         </div>
     </div>
 
-    <script>
-        // Removed event listener to allow form submission
-    </script>
+  
 </body>
 </html>

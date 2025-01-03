@@ -9,15 +9,62 @@
   
 </head>
 <body>
-    <nav>
+    <style>
+         .user-menu-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .user-menu-content {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: var(--bg-secondary);
+            box-shadow: var(--shadow);
+            border-radius: 5px;
+            padding: 0.5rem 0;
+            min-width: 150px;
+            display: none;
+        }
+
+        .user-menu-content a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-menu-content a:hover {
+            background-color: var(--bg-primary);
+        }
+
+    </style>
+<nav>
         <div class="container nav-container">
             <div class="logo">ProManage</div>
             <div class="nav-links">
-                <a href="#home">Home</a>
-                <a href="#projects">Projects</a>
-                <a href="#features">Features</a>
+                <a href="admin_home.php">Home</a>
+                <a href="dashbord.php">Dashboard</a>
+                <a href="all_projects.php">All Projects</a>
+                <a href="creat_project.php" class="active">Create Project</a>
             </div>
-            <a href="../views/login_page.php" class="sign-in-btn">Sign In</a>
+            <div class="user-menu">
+                <button class="user-menu-btn">
+                    <i class="fas fa-user-circle"></i>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="user-menu-content">
+                    <a href="#"><i class="fas fa-user"></i> Profile</a>
+                    <a href="#"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -25,7 +72,7 @@
         <div class="container">
             <h1>Elevate Your Project Management</h1>
             <p>Streamline your workflow, collaborate seamlessly, and achieve your goals with ProManage.</p>
-            <a href="views/login_page.php" class="cta-btn">Get Started</a>
+            <a href="all_projects.php" class="cta-btn">See Projects</a>
         </div>
     </header>
 
@@ -138,6 +185,21 @@
     </footer>
 
     <script>
+        // ****************user_menue******************************
+             const userMenuBtn = document.querySelector('.user-menu-btn');
+        const userMenuContent = document.querySelector('.user-menu-content');
+
+        userMenuBtn.addEventListener('click', () => {
+            userMenuContent.style.display = userMenuContent.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close user menu when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('.user-menu')) {
+                userMenuContent.style.display = 'none';
+            }
+        });
+
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {

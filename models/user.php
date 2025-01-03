@@ -80,60 +80,59 @@ class User {
             return "Database error: " . $e->getMessage();
         }
     }
-    public function login(){
 
-        if(!$this ->validateInput()) {
+    public function login(){
+        // Validate input first
+        if(!$this->validateInput()) {
             return[
                 "status" => "error",
                 "message" => "Entrées invalides. Veuillez vérifier vos informations."
             ];
-
         }
 
-        $query = "SELECT id , email , password , role FROM" . $this->table . "WHERE email = :email LIMIT 1";
+        // Regular login process
+        $query = "SELECT id, email, password, role FROM " . $this->table . " WHERE email = :email LIMIT 1";
         $stmt = $this->conn->prepare($query);
 
-        $stmt ->bindParam(':email', $this->email);
+        $stmt->bindParam(':email', $this->email);
 
-        try{
+        try {
             $stmt->execute();
 
-            // verify if user exists 
-            if( $stmt->rowCount() > 0) {
-                $user = $stmt ->fetch(PDO::FETCH_ASSOC);
+            // Verify if user exists 
+            if ($stmt->rowCount() > 0) {
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                if(password_verify($this->password, $user['password'])){
+                if (password_verify($this->password, $user['password'])) {
                     return [
-                    'status' => "success",
-                    'message' => 'connexion reussie',
-                        'user' =>[
-                            "id"=> $user["id"],
-                            "email"=> $user["email"],
-                            "role" => $user["role"],
-                        ],
-
+                        'status' => "success",
+                        'message' => 'Connexion réussie',
+                        'user' => [
+                            "id" => $user["id"],
+                            "email" => $user["email"],
+                            "role" => $user["role"]
+                        ]
                     ];
-
-            }  else {
+                } else {
+                    return [
+                        "status" => "error",
+                        "message" => "Mot de passe incorrect"
+                    ];
+                }
+            } else {
                 return [
-                    "status"=> "error",
-                    "message"=> "mot de passe incorect"
+                    "status" => "error",
+                    "message" => "Utilisateur non trouvé"
                 ];
-            }  
-        }else{
+            }
+        } catch (PDOException $e) {
+            // Log the error (in a production environment, use proper logging)
+            error_log("Login error: " . $e->getMessage());
             return [
-                "status"=> "error",
-                "message"=> "email introuvable"
+                "status" => "error",
+                "message" => "Erreur de connexion"
             ];
         }
-
-    }catch (PDOException $e) {
-        error_log("erreur survenue lors de la connexion". $e->getMessage());
-        return [
-            "status" => "error",
-            "message"=> $e->getMessage()
-        ];
     }
-}
 }
 ?>

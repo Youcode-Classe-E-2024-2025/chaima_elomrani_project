@@ -1,28 +1,46 @@
 <?php
-
 require_once("../config/connexion.php");
 require_once("../models/user.php");
+require_once("../models/role.php");
+require_once("UserController.php");
 
 $database = new Connexion();
 $connexion = $database->getconnexion();
 
 $user = new User($connexion);
+$userController = new UserController();
+$error = '';
 
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
-   
-    $user->email = htmlspecialchars(strip_tags($_POST['email']));
-    $user->password = htmlspecialchars(strip_tags($_POST['password']));
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-    $result = $user -> login();
+    try {
+        // Hardcoded admin check
+        if ($email === 'chaima@gmail.com' && $password === 'chaima') {
+            $_SESSION['user'] = [
+                'email' => $email,
+                'role' => 'admin'
+            ];
+            header('Location: ../views/admin_home.php');
+            exit();
+        }
 
-    if($result['status']=== 'success'){
-        $_SESSION['user'] = $result['user'];
-
-        header("Location: ../views/home.php");
-        exit();
-    }else{
-        $_SESSION['login_error'] = $result['message'];
-        header("Location: ../views/home.php");
+        // Regular login process
+        $loginResult = $userController->login($email, $password);
+        
+        if ($loginResult['success']) {
+            $_SESSION['user'] = $loginResult['user'];
+            header('Location: ../views/first_page.php');
+            exit();
+        } else {
+            $_SESSION['login_error'] = $loginResult['message'];
+            header('Location: ../views/login_page.php');
+            exit();
+        }
+    } catch (Exception $e) {
+        $_SESSION['login_error'] = $e->getMessage();
+        header('Location: ../views/first_page.php');
         exit();
     }
 }

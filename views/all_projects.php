@@ -3,22 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProManage - Projects</title>
+    <title>ProManage - All Projects</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-primary: #f8f9fa;
+            --bg-primary: #f5f5f5;
             --bg-secondary: #ffffff;
-            --text-primary: #2d3748;
-            --text-secondary: #4a5568;
-            --accent-primary: #3c366b;
-            --accent-secondary: #4c51bf;
-            --accent-tertiary: #667eea;
-            --success: #48bb78;
-            --warning: #ed8936;
-            --danger: #e53e3e;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --accent-primary: #2c7a7b;
+            --accent-secondary: #e67e22;
+            --accent-tertiary: #6b46c1;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -59,7 +55,6 @@
             font-size: 1.5rem;
             font-weight: bold;
             color: var(--accent-primary);
-            text-decoration: none;
         }
 
         .nav-links {
@@ -148,12 +143,11 @@
             border-radius: 10px;
             padding: 1.5rem;
             box-shadow: var(--shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease;
         }
 
         .project-card:hover {
             transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
         }
 
         .project-card h3 {
@@ -180,18 +174,18 @@
         }
 
         .status-active {
-            background-color: var(--success);
-            color: var(--bg-secondary);
+            background-color: #c6f6d5;
+            color: #22543d;
         }
 
         .status-completed {
-            background-color: var(--accent-tertiary);
-            color: var(--bg-secondary);
+            background-color: #e9d8fd;
+            color: #553c9a;
         }
 
         .status-on-hold {
-            background-color: var(--warning);
-            color: var(--bg-secondary);
+            background-color: #feebc8;
+            color: #7b341e;
         }
 
         .project-members {
@@ -216,23 +210,6 @@
             margin-left: 0;
         }
 
-        .project-progress {
-            margin-top: 1rem;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background-color: var(--bg-primary);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background-color: var(--accent-secondary);
-            transition: width 0.3s ease;
-        }
-
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -245,18 +222,19 @@
     </style>
 </head>
 <body>
-    <nav>
+<nav>
         <div class="container nav-container">
-            <a href="dashboard.html" class="logo">ProManage</a>
+            <div class="logo">ProManage</div>
             <div class="nav-links">
-                <a href="my-tasks.html">My Tasks</a>
-                <a href="projects.html" class="active">Projects</a>
-                <a href="create-project.html">Create Project</a>
+                <a href="home.php">Home</a>
+                <a href="dashbord.php">Dashboard</a>
+                <a href="all_projects.php">All Projects</a>
+                <a href="creat_project.php" class="active">Create Project</a>
             </div>
             <div class="user-menu">
                 <button class="user-menu-btn">
                     <i class="fas fa-user-circle"></i>
-                    <span>John Doe</span>
+               
                     <i class="fas fa-chevron-down"></i>
                 </button>
                 <div class="user-menu-content">
@@ -267,11 +245,10 @@
             </div>
         </div>
     </nav>
-
     <main>
         <div class="projects-header">
             <div class="container">
-                <h1 class="projects-title">Projects</h1>
+                <h1 class="projects-title">All Projects</h1>
                 <p class="projects-subtitle">View and manage all your ongoing and completed projects.</p>
             </div>
         </div>
@@ -282,11 +259,6 @@
                     <h3>E-commerce Platform Redesign</h3>
                     <div class="project-card-content">
                         <p>Redesigning the user interface and improving the overall user experience of our e-commerce platform.</p>
-                    </div>
-                    <div class="project-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 75%;"></div>
-                        </div>
                     </div>
                     <div class="project-card-footer">
                         <span class="project-status status-active">Active</span>
@@ -302,11 +274,6 @@
                     <div class="project-card-content">
                         <p>Creating a new mobile app for iOS and Android platforms to complement our web services.</p>
                     </div>
-                    <div class="project-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 40%;"></div>
-                        </div>
-                    </div>
                     <div class="project-card-footer">
                         <span class="project-status status-active">Active</span>
                         <div class="project-members">
@@ -321,11 +288,6 @@
                     <div class="project-card-content">
                         <p>Developing a comprehensive customer support portal to streamline support requests and improve response times.</p>
                     </div>
-                    <div class="project-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 100%;"></div>
-                        </div>
-                    </div>
                     <div class="project-card-footer">
                         <span class="project-status status-completed">Completed</span>
                         <div class="project-members">
@@ -338,11 +300,6 @@
                     <h3>Data Analytics Dashboard</h3>
                     <div class="project-card-content">
                         <p>Creating an interactive dashboard for visualizing and analyzing key business metrics and performance indicators.</p>
-                    </div>
-                    <div class="project-progress">
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 60%;"></div>
-                        </div>
                     </div>
                     <div class="project-card-footer">
                         <span class="project-status status-on-hold">On Hold</span>
@@ -402,4 +359,3 @@
     </script>
 </body>
 </html>
-
