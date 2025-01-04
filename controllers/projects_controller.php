@@ -29,3 +29,4 @@ class ProjectController {
     }
 }
 
+var_dump($_POST);

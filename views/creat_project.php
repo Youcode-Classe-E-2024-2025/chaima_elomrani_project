@@ -221,8 +221,8 @@
             </div>
         </div>
         <div class="container">
-            <form class="create-project-form" method="POST">
-                <div class="form-group">
+        <form class="create-project-form" method="POST" action="?action=project_controller">
+                    <div class="form-group">
                     <label for="project-name">Project Name</label>
                     <input type="text" id="project-name" name="project-name" required>
                     </div>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProManage - Professional Project Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/home.css">
+    <link rel="stylesheet" href="./assets/home.css">
   
 </head>
 <body>
@@ -17,7 +17,7 @@
                 <a href="#projects">Projects</a>
                 <a href="#features">Features</a>
             </div>
-            <a href="../views/login_page.php" class="sign-in-btn">Sign In</a>
+            <a href="views/login_page.php" class="sign-in-btn">Sign In</a>
         </div>
     </nav>
 
