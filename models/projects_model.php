@@ -1,43 +1,70 @@
 <?php
-// include("../config/connexion.php");
+include("../config/connexion.php");
+
+class ViewProjects {
+    private $conn;
+
+    public function __construct($host, $username, $password, $dbname) {
+        $this->conn = new mysqli($host, $username, $password, $dbname);
+
+        if ($this->conn->connect_error) {
+            die("Connection failed: " . $this->conn->connect_error);
+        }
+    }
+
+    public function displayProjects() {
+        $sql = "SELECT name, description, created_date , due_date FROM projects"; // Correction : 'decription' devient 'description'
+        $result = $this->conn->query($sql);
+
+        if ($result) {
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } else {
+            return [];
+        }
+    }
+
+    public function __destruct() {
+        $this->conn->close();
+    }
+}
+
+// Instanciation de la classe et affichage des projets
+$dbConnection = new mysqli('localhost', 'root', '', 'project_management');
+$sendProject = new sendProject($dbConnection);
 
 
-// class Project {
-//     private $db;
 
-//     public function __construct($db) {
-//         $this->db = $db;
-//     }
+class sendProject{
+   
+    private $conn;
+    private $table ='projects';
 
-//     public function create($name, $description) {
-//         $name = $this->db->escapeString($name);
-//         $description = $this->db->escapeString($description);
-//         // $team_members = $this->db->escapeString($team_members);
+    public $project_name;
+    public $project_description;
+    public $created_date;
+    public $due_date;
+    public $project_type;
 
-//         $sql = "INSERT INTO projects (name, description) VALUES ('$name', '$description')";
+    public function __construct($db) {
+        $this->conn = $db;
+    }
+
+    public function addProject (){
+        $query = "INSERT INTO " . $this->table . " (name, description, created_date, due_date, type) VALUES (:project_name, :project_description, :created_date, :due_date, :project_type)";
         
-//         if ($this->db->query($sql)) {
-//             return true;
-//         } else {
-//             return false;
-//         }
-//     }
-// }
+        $stmt = $this->conn->prepare($query);
 
-// // Usage
-// if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//     $db = new Database("localhost", "root", "", "project_management");
-//     $project = new Project($db);
+        $stmt-> bindParam(":project_name", $this->project_name);
+        $stmt->bindParam(":project_description", $this->project_description);
+        $stmt->bindParam(":created_date", $this->created_date);
+        $stmt->bindParam(":due_date", $this->due_date);
+        $stmt->bindParam(":project_type", $this->project_type);
 
-//     $name = $_POST["project_name"];
-//     $description = $_POST["project_description"];
-    
+        if($stmt->execute()){
+            return true;
+        }
+        return false;
 
-//     if ($project->create($name, $description )) {
-//         echo "Project created successfully!";
-//     } else {
-//         echo "Error creating project.";
-//     }
+    }
 
-//     $db->close();
-// }
+}

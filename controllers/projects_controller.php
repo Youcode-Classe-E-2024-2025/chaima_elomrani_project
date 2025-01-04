@@ -1,34 +1,31 @@
 <?php
-include("../config/connexion.php");
 
-class ViewProjects {
-    private $conn;
+require_once '../config/connexion.php';
+require_once '../models/projects_model.php';
 
-    public function __construct($host, $username, $password, $dbname) {
-        $this->conn = new mysqli($host, $username, $password, $dbname);
+class ProjectController {
+    private $db;
+    private $project;
 
-        if ($this->conn->connect_error) {
-            die("Connection failed: " . $this->conn->connect_error);
-        }
+    public function __construct() {
+        $database = new connexion();
+        $db = $database->getconnexion();
+        $this->project = new Project($db);
     }
 
-    public function displayProjects() {
-        $sql = "SELECT name, description, created_date , due_date FROM projects"; // Correction : 'decription' devient 'description'
-        $result = $this->conn->query($sql);
+    public function createProject($data) {
+        $this->project->name = $data['project-name'];
+        $this->project->description = $data['project-description'];
+        $this->project->type = $data['project-manager'];
+        $this->project->created_date = $data['created-date'];
+        $this->project->due_date = $data['due-date'];
+        $this->project->chef_id = $_SESSION['user_id']; // Assuming you have user authentication in place
 
-        if ($result) {
-            return $result->fetch_all(MYSQLI_ASSOC);
+        if($this->project->create()) {
+            return true;
         } else {
-            return [];
+            return false;
         }
-    }
-
-    public function __destruct() {
-        $this->conn->close();
     }
 }
-
-// Instanciation de la classe et affichage des projets
-$db = new ViewProjects('localhost', 'root', '', 'project_management');
-$projects = $db->displayProjects();
 

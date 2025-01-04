@@ -1,5 +1,5 @@
 <?php
-include("../controllers/projects_controller.php");
+include("../models/projects_model.php");
 ?>
 
 <!DOCTYPE html>

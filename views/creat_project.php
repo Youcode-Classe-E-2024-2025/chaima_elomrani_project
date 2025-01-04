@@ -1,3 +1,7 @@
+<?php
+// require_once 'controllers/projects_controller.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -167,6 +171,8 @@
             font-size: 1rem;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            display: flex;
+            justify-self: center;
         }
         .submit-btn:hover {
             background-color: #236c6d;
@@ -189,15 +195,14 @@
         <div class="container nav-container">
             <div class="logo">ProManage</div>
             <div class="nav-links">
+               <a href="home.php">Home</a>
                 <a href="dashbord.php">Dashboard</a>
-                <a href="first_page.php">All Projects</a>
-                <a href="mytasks.php">My Tasks</a>
+                <a href="all_projects.php">All Projects</a>
                 <a href="creat_project.php" class="active">Create Project</a>
             </div>
             <div class="user-menu">
                 <button class="user-menu-btn">
                     <i class="fas fa-user-circle"></i>
-                    <span>John Doe</span>
                     <i class="fas fa-chevron-down"></i>
                 </button>
                 <div class="user-menu-content">
@@ -216,57 +221,40 @@
             </div>
         </div>
         <div class="container">
-            <form class="create-project-form">
+            <form class="create-project-form" method="POST">
                 <div class="form-group">
                     <label for="project-name">Project Name</label>
                     <input type="text" id="project-name" name="project-name" required>
-                </div>
+                    </div>
                 <div class="form-group">
                     <label for="project-description">Project Description</label>
                     <textarea id="project-description" name="project-description" required></textarea>
                 </div>
                 <div class="form-group-inline">
                     <div class="form-group">
-                        <label for="start-date">Start Date</label>
-                        <input type="date" id="start-date" name="start-date" required>
+                        <label for="created-date">Created Date</label>
+                        <input type="date" id="created-date" name="created-date" required>
                     </div>
                     <div class="form-group">
-                        <label for="end-date">End Date</label>
-                        <input type="date" id="end-date" name="end-date" required>
+                        <label for="due-date">due Date</label>
+                        <input type="date" id="due-date" name="due-date" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="project-manager">Project Manager</label>
+                    <label for="project-manager">Project Type</label>
                     <select id="project-manager" name="project-manager" required>
-                        <option value="">Select a project manager</option>
-                        <option value="john-doe">John Doe</option>
-                        <option value="jane-smith">Jane Smith</option>
-                        <option value="mike-johnson">Mike Johnson</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="team-members">Team Members</label>
-                    <select id="team-members" name="team-members" multiple required>
-                        <option value="alice-williams">Alice Williams</option>
-                        <option value="bob-brown">Bob Brown</option>
-                        <option value="carol-taylor">Carol Taylor</option>
-                        <option value="david-miller">David Miller</option>
-                        <option value="eva-garcia">Eva Garcia</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="project-status">Project Status</label>
-                    <select id="project-status" name="project-status" required>
-                        <option value="planning">Planning</option>
-                        <option value="in-progress">In Progress</option>
-                        <option value="on-hold">On Hold</option>
-                        <option value="completed">Completed</option>
+                        <option value="">Select type</option>
+                        <option value="public">public</option>
+                        <option value="private">private</option>
                     </select>
                 </div>
                 <button type="submit" class="submit-btn">Create Project</button>
             </form>
         </div>
     </main>
+
+
+
     <script>
         // User menu toggle
         const userMenuBtn = document.querySelector('.user-menu-btn');
@@ -280,25 +268,7 @@
                 userMenuContent.style.display = 'none';
             }
         });
-        // Form submission
-        const createProjectForm = document.querySelector('.create-project-form');
-        createProjectForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            // Add your form submission logic here
-            console.log('Form submitted');
-            // You can add AJAX request to send form data to the server
-        });
-        // Animate form on load
-        window.addEventListener('load', () => {
-            const form = document.querySelector('.create-project-form');
-            form.style.opacity = 0;
-            form.style.transform = 'translateY(20px)';
-            form.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            setTimeout(() => {
-                form.style.opacity = 1;
-                form.style.transform = 'translateY(0)';
-            }, 100);
-        });
+        
     </script>
 </body>
 </html>
