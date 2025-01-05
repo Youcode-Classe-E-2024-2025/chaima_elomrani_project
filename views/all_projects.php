@@ -1,18 +1,43 @@
 <?php
-require_once("./models/projects_model.php");
-require_once("./controllers/delete.php");
-?>
-<?php if (isset($_GET['message'])): ?>
-    <p style="color: green;"><?= htmlspecialchars($_GET['message']) ?></p>
-<?php endif; ?>
+session_start();
+require_once './config/connexion.php';
+require_once './models/projects_model.php';
 
-<?php if (isset($_GET['error'])): ?>
-    <p style="color: red;"><?= htmlspecialchars($_GET['error']) ?></p>
-<?php endif; ?>
+// Database connection
+$dbConnection = new mysqli('localhost', 'root', '', 'project_management');
+
+// Check connection
+if ($dbConnection->connect_error) {
+    die("Connection failed: " . $dbConnection->connect_error);
+}
+
+// Handle delete action
+if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
+    $project_id = intval($_GET['id']);
+    
+    // Prepare and execute delete query
+    $delete_query = "DELETE FROM projects WHERE id = ?";
+    $stmt = $dbConnection->prepare($delete_query);
+    $stmt->bind_param("i", $project_id);
+    
+    if ($stmt->execute()) {
+        $_SESSION['message'] = "Project deleted successfully.";
+    } else {
+        $_SESSION['error'] = "Failed to delete project.";
+    }
+    
+    // Redirect to avoid form resubmission
+    header("Location: index.php?page=all_projects");
+    exit();
+}
+
+// Fetch projects
+$viewProjects = new ViewProjects($dbConnection);
+$projects = $viewProjects->displayProjects();
+?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -224,7 +249,6 @@ require_once("./controllers/delete.php");
             margin-left: 0;
         }
 
-
         .delete-btn {
             /* display: flex;
             flex-direction:row; */
@@ -256,14 +280,20 @@ require_once("./controllers/delete.php");
             top: 30px;
         }
 
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
+        .message {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
 
-            .projects-title {
-                font-size: 1.5rem;
-            }
+        .success-message {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+
+        .error-message {
+            background-color: #f2dede;
+            color: #a94442;
         }
     </style>
 </head>
@@ -301,6 +331,26 @@ require_once("./controllers/delete.php");
         </div>
 
         <div class="container">
+            <?php 
+            // Display success or error messages
+            if (isset($_SESSION['message'])): ?>
+                <div class="message success-message">
+                    <?php 
+                    echo $_SESSION['message']; 
+                    unset($_SESSION['message']);
+                    ?>
+                </div>
+            <?php endif; ?>
+            
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="message error-message">
+                    <?php 
+                    echo $_SESSION['error']; 
+                    unset($_SESSION['error']);
+                    ?>
+                </div>
+            <?php endif; ?>
+
             <div class="projects-grid">
                 <?php foreach ($projects as $project): ?>
                     <div class="project-card">

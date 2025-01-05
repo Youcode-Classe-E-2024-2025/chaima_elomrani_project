@@ -64,4 +64,15 @@ class sendProject{
 
     }
 
+    public function deleteProject($project_id) {
+        $query = "DELETE FROM " . $this->table . " WHERE id = :project_id";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":project_id", $project_id, PDO::PARAM_INT);
+
+        if($stmt->execute()){
+            return true;
+        }
+        return false;
+    }
 }
