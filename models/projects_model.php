@@ -4,12 +4,8 @@ require_once("./config/connexion.php");
 class ViewProjects {
     private $conn;
 
-    public function __construct($host, $username, $password, $dbname) {
-        $this->conn = new mysqli($host, $username, $password, $dbname);
-
-        if ($this->conn->connect_error) {
-            die("Connection failed: " . $this->conn->connect_error);
-        }
+    public function __construct($db) {
+        $this->conn = $db;
     }
 
     public function displayProjects() {
@@ -32,7 +28,8 @@ class ViewProjects {
 $dbConnection = new mysqli('localhost', 'root', '', 'project_management');
 $sendProject = new sendProject($dbConnection);
 
-
+$viewProjects = new ViewProjects($dbConnection);
+$projects = $viewProjects->displayProjects();
 
 class sendProject{
    

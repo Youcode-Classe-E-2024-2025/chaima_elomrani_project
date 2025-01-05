@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,7 +75,8 @@
             transition: color 0.3s ease;
         }
 
-        .nav-links a:hover, .nav-links a.active {
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--accent-primary);
         }
 
@@ -204,6 +206,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -225,15 +228,16 @@
         }
     </style>
 </head>
+
 <body>
-<nav>
+    <nav>
         <div class="container nav-container">
             <div class="logo">ProManage</div>
             <div class="nav-links">
-                <a href="admin_home.php">Home</a>
-                <a href="dashbord.php">Dashboard</a>
-                <a href="all_projects.php">All Projects</a>
-                <a href="creat_project.php" class="active">Create Project</a>
+                <a href="index.php?page=home">Home</a>
+                <a href="index.php?page=dashbord">Dashboard</a>
+                <a href="index.php?page=all_projects">All Projects</a>
+                <a href="index.php?page=creat_project" class="active">Create Project</a>
             </div>
             <div class="user-menu">
                 <button class="user-menu-btn">
@@ -304,7 +308,7 @@
         document.addEventListener('click', (event) => {
             if (!event.target.closest('.user-menu')) {
                 userMenuContent.style.display = 'none';
-            } 
+            }
         });
 
         // Activity Chart
@@ -351,5 +355,5 @@
         });
     </script>
 </body>
-</html>
 
+</html>

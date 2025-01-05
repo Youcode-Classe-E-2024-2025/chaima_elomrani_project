@@ -73,7 +73,7 @@
         <div class="container">
             <h1>Elevate Your Project Management</h1>
             <p>Streamline your workflow, collaborate seamlessly, and achieve your goals with ProManage.</p>
-            <a href="all_projects.php" class="cta-btn">See Projects</a>
+            <a href="index.php?page=all_projects" class="cta-btn">See Projects</a>
         </div>
     </header>
 

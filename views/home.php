@@ -25,7 +25,7 @@
         <div class="container">
             <h1>Elevate Your Project Management</h1>
             <p>Streamline your workflow, collaborate seamlessly, and achieve your goals with ProManage.</p>
-            <a href="views/login_page.php" class="cta-btn">Get Started</a>
+            <a href="index.php?page=login_page" class="cta-btn">Get Started</a>
         </div>
     </header>
 

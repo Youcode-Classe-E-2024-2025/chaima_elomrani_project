@@ -4,6 +4,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,22 +21,26 @@
             --accent-tertiary: #6b46c1;
             --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
         }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 0 20px;
         }
+
         nav {
             background-color: var(--bg-secondary);
             box-shadow: var(--shadow);
@@ -43,33 +48,41 @@
             width: 100%;
             z-index: 1000;
         }
+
         .nav-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 1rem 0;
         }
+
         .logo {
             font-size: 1.5rem;
             font-weight: bold;
             color: var(--accent-primary);
         }
+
         .nav-links {
             display: flex;
             gap: 2rem;
         }
+
         .nav-links a {
             text-decoration: none;
             color: var(--text-secondary);
             font-weight: 500;
             transition: color 0.3s ease;
         }
-        .nav-links a:hover, .nav-links a.active {
+
+        .nav-links a:hover,
+        .nav-links a.active {
             color: var(--accent-primary);
         }
+
         .user-menu {
             position: relative;
         }
+
         .user-menu-btn {
             background: none;
             border: none;
@@ -79,6 +92,7 @@
             gap: 0.5rem;
             color: var(--text-secondary);
         }
+
         .user-menu-content {
             position: absolute;
             right: 0;
@@ -90,6 +104,7 @@
             min-width: 150px;
             display: none;
         }
+
         .user-menu-content a {
             display: block;
             padding: 0.5rem 1rem;
@@ -97,43 +112,52 @@
             text-decoration: none;
             transition: background-color 0.3s ease;
         }
+
         .user-menu-content a:hover {
             background-color: var(--bg-primary);
         }
+
         main {
             padding-top: 5rem;
         }
+
         .create-project-header {
             background-color: var(--bg-secondary);
             padding: 2rem 0;
             margin-bottom: 2rem;
             box-shadow: var(--shadow);
         }
+
         .create-project-title {
             font-size: 2rem;
             color: var(--accent-primary);
             margin-bottom: 0.5rem;
         }
+
         .create-project-subtitle {
             color: var(--text-secondary);
         }
+
         .create-project-form {
             background-color: var(--bg-secondary);
             border-radius: 10px;
             padding: 2rem;
             box-shadow: var(--shadow);
             /* max-width : 800px; */
-       
+
         }
+
         .form-group {
             margin-bottom: 1.5rem;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
             color: var(--text-primary);
             font-weight: 500;
         }
+
         .form-group input,
         .form-group textarea,
         .form-group select {
@@ -144,10 +168,12 @@
             font-size: 1rem;
             color: var(--text-primary);
         }
+
         .form-group textarea {
             resize: vertical;
             min-height: 100px;
         }
+
         .form-group select {
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
@@ -155,13 +181,16 @@
             background-position: right 0.75rem center;
             background-size: 1.5em;
         }
+
         .form-group-inline {
             display: flex;
             gap: 1rem;
         }
-        .form-group-inline > * {
+
+        .form-group-inline>* {
             flex: 1;
         }
+
         .submit-btn {
             background-color: var(--accent-primary);
             color: white;
@@ -174,31 +203,36 @@
             display: flex;
             justify-self: center;
         }
+
         .submit-btn:hover {
             background-color: #236c6d;
         }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
             }
+
             .create-project-title {
                 font-size: 1.5rem;
             }
+
             .form-group-inline {
                 flex-direction: column;
             }
         }
     </style>
 </head>
+
 <body>
     <nav>
         <div class="container nav-container">
             <div class="logo">ProManage</div>
             <div class="nav-links">
-               <a href="home.php">Home</a>
-                <a href="dashbord.php">Dashboard</a>
-                <a href="all_projects.php">All Projects</a>
-                <a href="creat_project.php" class="active">Create Project</a>
+                <a href="index.php?page=home">Home</a>
+                <a href="index.php?page=dashbord">Dashboard</a>
+                <a href="index.php?page=all_projects">All Projects</a>
+                <a href="index.php?page=creat_project" class="active">Create Project</a>
             </div>
             <div class="user-menu">
                 <button class="user-menu-btn">
@@ -221,11 +255,11 @@
             </div>
         </div>
         <div class="container">
-        <form class="create-project-form" method="POST" action="?action=projects_controller">
-                    <div class="form-group">
+            <form class="create-project-form" method="POST" action="index.php?action=projects_controller">
+                <div class="form-group">
                     <label for="project-name">Project Name</label>
                     <input type="text" id="project-name" name="project-name" required>
-                    </div>
+                </div>
                 <div class="form-group">
                     <label for="project-description">Project Description</label>
                     <textarea id="project-description" name="project-description" required></textarea>
@@ -268,7 +302,8 @@
                 userMenuContent.style.display = 'none';
             }
         });
-        
+
     </script>
 </body>
+
 </html>

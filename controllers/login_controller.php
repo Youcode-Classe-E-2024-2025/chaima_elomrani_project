@@ -22,9 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($email === 'chaima@gmail.com' && $password === 'chaima') {
             $_SESSION['user'] = [
                 'email' => $email,
-                'role' => 'admin'
+                'role' => 'admin',
+                'id'=> '1',
             ];
-            header('Location: index.php?page=admin_home.php');
+            header('Location: index.php?page=admin_home');
             exit();
         }
 
@@ -33,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($loginResult['status']) {
             $_SESSION['user'] = $loginResult['user'];
+            $_SESSION['user_id'] = $loginResult['id'];
             header('Location:index.php');
             exit();
         } else {
@@ -45,6 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         var_dump($_SESSION);
         exit();
     }
-}
+} 
 
 ?>

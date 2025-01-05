@@ -216,6 +216,27 @@ require_once("./models/projects_model.php");
             margin-left: 0;
         }
 
+
+        .icon{
+            /* display: flex;
+            flex-direction:row; */
+            /* gap: 20px; */
+            position: absolute;
+            right: 50px;
+            top: 35px;
+            width: 20px;
+            height: 25px;   
+
+        }
+
+        .update_icon{
+            width: 20px;
+            height: 25px;
+            position: absolute;
+            right: 20px;
+            top: 30px;
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
@@ -264,17 +285,21 @@ require_once("./models/projects_model.php");
             <div class="projects-grid">
                 <?php foreach ($projects as $project): ?>
                     <div class="project-card">
-                        <h3><?= htmlspecialchars($project['name']) ?></h3>
-                        <div class="project-card-content">
-                            <p><?= htmlspecialchars($project['description']) ?></p>
+                            <i class="fa-solid fa-trash  icon"></i>
+                            <img src="images/update_icon.svg"class="update_icon" alt="">
+                            <h3><?= htmlspecialchars($project['name']) ?></h3>
+                           
+                            <div class="project-card-content">
+                                <p><?= htmlspecialchars($project['description']) ?></p>
+                            </div>
+                            <div class="project-card-footer">
+                                <span class="project-status"> created in:
+                                    <?= htmlspecialchars($project['created_date']) ?></span>
+                            </div>
                         </div>
-                        <div class="project-card-footer">
-                          <span class="project-status"> created in: <?= htmlspecialchars($project['created_date']) ?></span>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        </div>
     </main>
 
     <script>
