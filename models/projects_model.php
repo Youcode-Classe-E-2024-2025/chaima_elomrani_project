@@ -1,5 +1,5 @@
 <?php
-include("../config/connexion.php");
+require_once("./config/connexion.php");
 
 class ViewProjects {
     private $conn;
@@ -39,11 +39,11 @@ class sendProject{
     private $conn;
     private $table ='projects';
 
-    public $project_name;
-    public $project_description;
+    public $name;
+    public $description;
     public $created_date;
     public $due_date;
-    public $project_type;
+    public $type;
 
     public function __construct($db) {
         $this->conn = $db;
@@ -54,11 +54,11 @@ class sendProject{
         
         $stmt = $this->conn->prepare($query);
 
-        $stmt-> bindParam(":project_name", $this->project_name);
-        $stmt->bindParam(":project_description", $this->project_description);
+        $stmt-> bindParam(":project_name", $this->name);
+        $stmt->bindParam(":project_description", $this->description);
         $stmt->bindParam(":created_date", $this->created_date);
         $stmt->bindParam(":due_date", $this->due_date);
-        $stmt->bindParam(":project_type", $this->project_type);
+        $stmt->bindParam(":project_type", $this->type);
 
         if($stmt->execute()){
             return true;

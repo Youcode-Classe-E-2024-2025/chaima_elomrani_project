@@ -1,7 +1,9 @@
 <?php
 
-require_once '../config/connexion.php';
-require_once '../models/projects_model.php';
+require_once './config/connexion.php';
+require_once './models/projects_model.php';
+
+
 
 class ProjectController {
     private $db;

@@ -1,8 +1,9 @@
 <?php
-require_once("../config/connexion.php");
-require_once("../models/user.php");
-require_once("../models/role.php");
-require_once("UserController.php");
+require_once("./config/connexion.php");
+require_once("./models/user.php");
+require_once("./models/role.php");
+require_once("./controllers/UserController.php");
+
 
 $database = new Connexion();
 $connexion = $database->getconnexion();
@@ -23,25 +24,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'email' => $email,
                 'role' => 'admin'
             ];
-            header('Location: ../views/admin_home.php');
+            header('Location: index.php?page=admin_home.php');
             exit();
         }
 
         // Regular login process
         $loginResult = $userController->login($email, $password);
         
-        if ($loginResult['success']) {
+        if ($loginResult['status']) {
             $_SESSION['user'] = $loginResult['user'];
-            header('Location: ../views/first_page.php');
+            header('Location:index.php');
             exit();
         } else {
             $_SESSION['login_error'] = $loginResult['message'];
-            header('Location: ../views/login_page.php');
+            header('Location: index.php?page=login_page');
             exit();
         }
     } catch (Exception $e) {
         $_SESSION['login_error'] = $e->getMessage();
-        header('Location: ../views/first_page.php');
+        var_dump($_SESSION);
         exit();
     }
 }

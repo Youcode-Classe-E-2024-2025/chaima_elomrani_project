@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProManage - Professional Project Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/home.css">
+    <link rel="stylesheet" href="./assets/home.css">
 
 </head>
 
@@ -50,10 +50,10 @@
         <div class="container nav-container">
             <div class="logo">ProManage</div>
             <div class="nav-links">
-                <a href="admin_home.php">Home</a>
-                <a href="dashbord.php">Dashboard</a>
-                <a href="all_projects.php">All Projects</a>
-                <a href="creat_project.php" class="active">Create Project</a>
+                <a href="index.php?page=admin_home">Home</a>
+                <a href="index.php?page=dashbord">Dashboard</a>
+                <a href="index.php?page=all_projects">All Projects</a>
+                <a href="index.php?page=creat_project" class="active">Create Project</a>
             </div>
             <div class="user-menu">
                 <button class="user-menu-btn">
@@ -110,7 +110,7 @@
             <h2>Public Projects</h2>
             <div class="project-grid">
                 <div class="project-card">
-                    <img src="../images/image1.jpg" alt="Project 1" class="project-image">
+                    <img src="./images/image1.jpg" alt="Project 1" class="project-image">
                     <div class="project-info">
                         <h3>E-commerce Platform</h3>
                         <p>A scalable e-commerce solution for small businesses.</p>
@@ -121,7 +121,7 @@
                     </div>
                 </div>
                 <div class="project-card">
-                    <img src="../images/image2.jpg" alt="Project 2" class="project-image">
+                    <img src="./images/image2.jpg" alt="Project 2" class="project-image">
                     <div class="project-info">
                         <h3>Fitness Tracker App</h3>
                         <p>Mobile app for tracking workouts and nutrition.</p>
@@ -132,7 +132,7 @@
                     </div>
                 </div>
                 <div class="project-card">
-                    <img src="../images/image3.jpg" alt="Project 3" class="project-image">
+                    <img src="./images/image3.jpg" alt="Project 3" class="project-image">
                     <div class="project-info">
                         <h3>Data Visualization Dashboard</h3>
                         <p>Interactive dashboard for visualizing complex datasets.</p>
@@ -143,7 +143,7 @@
                     </div>
                 </div>
                 <div class="project-card">
-                    <img src="../images/image4.jpg" alt="Project 3" class="project-image">
+                    <img src="./images/image4.jpg" alt="Project 3" class="project-image">
                     <div class="project-info">
                         <h3>Data Visualization Dashboard</h3>
                         <p>Interactive dashboard for visualizing complex datasets.</p>
@@ -154,7 +154,7 @@
                     </div>
                 </div>
                 <div class="project-card">
-                    <img src="../images/image5.jpg" alt="Project 3" class="project-image">
+                    <img src="./images/image5.jpg" alt="Project 3" class="project-image">
                     <div class="project-info">
                         <h3>Data Visualization Dashboard</h3>
                         <p>Interactive dashboard for visualizing complex datasets.</p>
@@ -165,7 +165,7 @@
                     </div>
                 </div>
                 <div class="project-card">
-                    <img src="../images/image6.jpg" alt="Project 3" class="project-image">
+                    <img src="./images/image6.jpg" alt="Project 3" class="project-image">
                     <div class="project-info">
                         <h3>Data Visualization Dashboard</h3>
                         <p>Interactive dashboard for visualizing complex datasets.</p>

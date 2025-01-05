@@ -1,5 +1,5 @@
 <?php
-include("../controllers/signup_controller.php");
+include("./controllers/signup_controller.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +8,7 @@ include("../controllers/signup_controller.php");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProManage - Sign Up</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/signup.css">
+    <link rel="stylesheet" href="./assets/signup.css">
 </head>
 <body>
     <div class="signup-container">
@@ -25,7 +25,7 @@ include("../controllers/signup_controller.php");
         </div>
         <?php endif; ?>
 
-        <form class="signup-form" action="../controllers/signup_controller.php" method="POST" id="signupForm">
+        <form class="signup-form" action="index.php?action=signup_controller" method="POST" id="signupForm">
             <div class="form-group">
                 <label for="name">Full Name</label>
                 <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>" required>
@@ -48,7 +48,7 @@ include("../controllers/signup_controller.php");
             <p>By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
         </div>
         <div class="login-link">
-            <p>Already have an account? <a href="login_page.php">Log in</a></p>
+            <p>Already have an account? <a href="index.php?page=login_page">Log in</a></p>
         </div>
     </div>
 

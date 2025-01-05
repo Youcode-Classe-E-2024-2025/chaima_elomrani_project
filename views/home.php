@@ -13,11 +13,11 @@
         <div class="container nav-container">
             <div class="logo">ProManage</div>
             <div class="nav-links">
-                <a href="#home">Home</a>
+                <a href="">Home</a>
                 <a href="#projects">Projects</a>
                 <a href="#features">Features</a>
             </div>
-            <a href="views/login_page.php" class="sign-in-btn">Sign In</a>
+            <a href="index.php?page=signup" class="sign-in-btn">Sign In</a>
         </div>
     </nav>
 

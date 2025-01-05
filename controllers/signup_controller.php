@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-include ("../config/connexion.php");
-include ("../models/user.php");
+require_once ("./config/connexion.php");
+require_once ("./models/user.php");
 
 // Initialize variables
 $name = "";
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($result === "Welcome to our site!") {
                 // Successful signup
                 $_SESSION['success_message'] = "Account created successfully. Please log in.";
-                header("Location: ../views/login_page.php");
+                header(header: "Location: index.php?page=login_page");
                 exit();
             } else {
                 // Signup failed
@@ -71,8 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         } catch (Exception $e) {
             // Handle unexpected errors
-            error_log("Signup error: " . $e->getMessage());
             $errors[] = "An unexpected error occurred. Please try again.";
+            throw new Exception($e->getMessage());
         }
     }
 
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['signup_email'] = $email;
 
     // Redirect back to signup page
-    header("Location: login_page.php");
+    header("Location: index.php?page=login_page");
     exit();
 }
 ?>
