@@ -1,6 +1,14 @@
 <?php
 require_once("./models/projects_model.php");
+require_once("./controllers/delete.php");
 ?>
+<?php if (isset($_GET['message'])): ?>
+    <p style="color: green;"><?= htmlspecialchars($_GET['message']) ?></p>
+<?php endif; ?>
+
+<?php if (isset($_GET['error'])): ?>
+    <p style="color: red;"><?= htmlspecialchars($_GET['error']) ?></p>
+<?php endif; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -227,7 +235,17 @@ require_once("./models/projects_model.php");
             width: 20px;
             height: 25px;
             background: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: red;
+            font-size: 1rem;
+            transition: color 0.3s ease;
 
+        }
+
+        .delete-btn:hover {
+            color: darkred;
         }
 
         .update_icon {
@@ -286,7 +304,8 @@ require_once("./models/projects_model.php");
             <div class="projects-grid">
                 <?php foreach ($projects as $project): ?>
                     <div class="project-card">
-                        <form method="POST" action="delete_project.php" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                        <form method="POST" action="index.php?action=delete"
+                            onsubmit="return confirm('Are you sure you want to delete this project?');">
                             <input type="hidden" name="project_id" value="<?= htmlspecialchars($project['id']) ?>">
                             <button type="submit" class="delete-btn">
                                 <i class="fa-solid fa-trash icon"></i>

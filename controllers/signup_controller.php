@@ -45,43 +45,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Passwords do not match";
     }
 
-    // If no errors, proceed with signup
     if (empty($errors)) {
         try {
-            // Create user object
             $user = new User($connexion);
 
-            // Set user properties
             $user->name = $name;
             $user->email = $email;
             $user->password = $password;
 
-            // Attempt signup
             $result = $user->signup();
 
-            // Check signup result
             if ($result === "Welcome to our site!") {
-                // Successful signup
                 $_SESSION['success_message'] = "Account created successfully. Please log in.";
                 header(header: "Location: index.php?page=login_page");
                 exit();
             } else {
-                // Signup failed
                 $errors[] = $result;
             }
         } catch (Exception $e) {
-            // Handle unexpected errors
             $errors[] = "An unexpected error occurred. Please try again.";
             throw new Exception($e->getMessage());
         }
     }
 
-    // If there are errors, store them in session to display on signup page
     $_SESSION['signup_errors'] = $errors;
     $_SESSION['signup_name'] = $name;
     $_SESSION['signup_email'] = $email;
 
-    // Redirect back to signup page
     header("Location: index.php?page=login_page");
     exit();
 }

@@ -1,5 +1,9 @@
 <?php
+session_start();
 require_once('./config/connexion.php');
+
+$database = new Connexion();
+$connexion = $database->getconnexion();
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
@@ -17,10 +21,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             echo "projects has been deleted successfully";
             exit;
    
-        }catch(PDOException $e){
-            echo"erroooooor" $e->getMessage();
+        }catch (Exception $e) {
+            $_SESSION['delete_error'] = $e->getMessage();
+            var_dump($_SESSION);
+            exit();
         }
     }else{
         header("Location:index.php?page=error404");
+        exit;
     }
 }
