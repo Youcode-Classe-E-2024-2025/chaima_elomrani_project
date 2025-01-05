@@ -217,7 +217,7 @@ require_once("./models/projects_model.php");
         }
 
 
-        .icon{
+        .delete-btn {
             /* display: flex;
             flex-direction:row; */
             /* gap: 20px; */
@@ -225,11 +225,12 @@ require_once("./models/projects_model.php");
             right: 50px;
             top: 35px;
             width: 20px;
-            height: 25px;   
+            height: 25px;
+            background: none;
 
         }
 
-        .update_icon{
+        .update_icon {
             width: 20px;
             height: 25px;
             position: absolute;
@@ -285,21 +286,26 @@ require_once("./models/projects_model.php");
             <div class="projects-grid">
                 <?php foreach ($projects as $project): ?>
                     <div class="project-card">
-                            <i class="fa-solid fa-trash  icon"></i>
-                            <img src="images/update_icon.svg"class="update_icon" alt="">
-                            <h3><?= htmlspecialchars($project['name']) ?></h3>
-                           
-                            <div class="project-card-content">
-                                <p><?= htmlspecialchars($project['description']) ?></p>
-                            </div>
-                            <div class="project-card-footer">
-                                <span class="project-status"> created in:
-                                    <?= htmlspecialchars($project['created_date']) ?></span>
-                            </div>
+                        <form method="POST" action="delete_project.php" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                            <input type="hidden" name="project_id" value="<?= htmlspecialchars($project['id']) ?>">
+                            <button type="submit" class="delete-btn">
+                                <i class="fa-solid fa-trash icon"></i>
+                            </button>
+                        </form>
+                        <img src="images/update_icon.svg" class="update_icon" alt="">
+                        <h3><?= htmlspecialchars($project['name']) ?></h3>
+
+                        <div class="project-card-content">
+                            <p><?= htmlspecialchars($project['description']) ?></p>
                         </div>
-                    <?php endforeach; ?>
-                </div>
+                        <div class="project-card-footer">
+                            <span class="project-status"> created in:
+                                <?= htmlspecialchars($project['created_date']) ?></span>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
+        </div>
     </main>
 
     <script>
