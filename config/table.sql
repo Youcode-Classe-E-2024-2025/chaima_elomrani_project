@@ -127,6 +127,11 @@ INSERT INTO tasks (name, description, start_date, due_date, status, category, pr
 ('Write User Guide', 'Document the application features.', '2024-03-01', '2024-03-10', 'ToDo', 3, 1, 7, 4),
 ('UI Testing', 'Test the user interface for usability.', '2024-03-05', '2024-03-15', 'In Progress', 3, 1, 2, 2),
 ('Set Up CI/CD Pipeline', 'Implement continuous integration and deployment.', '2024-04-01', '2024-04-10', 'Done', 2, 2, 1, 3);
+( 'Frontend UI Design', 'Create UI components for the dashboard', '2024-03-01', '2024-03-15', 'InProgress', 1, 3, 4, 2),
+( 'Testing and Bug Fixing', 'Perform unit and integration testing', '2024-03-20', '2024-04-05', 'ToDo', 3, 2, 5, 8),
+( 'DevOps Pipeline Upgrade', 'Automate builds and deployments', '2024-01-15', '2024-02-15', 'Done', 2, 4, 6, 1),
+('Documentation Update', 'Update project documentation and guidelines', '2024-02-01', '2024-02-10', 'Done', 4, 1, 3, 5);
+
 
 
 

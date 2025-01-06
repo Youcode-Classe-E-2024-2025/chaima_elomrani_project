@@ -1,8 +1,59 @@
 <?php
+require_once('./config/connexion.php');
 require_once('./controllers/task_controller.php');
 require_once('./models/tasks_model.php');
 
+// Database connection
+$dbConnection = new mysqli('localhost', 'root', '', 'project_management');
 
+if ($dbConnection->connect_error) {
+    die("Connection failed: " . $dbConnection->connect_error);
+}
+
+// Fetch tags from the database
+$tags_query = "SELECT id, name FROM tags";
+$tags_result = $dbConnection->query($tags_query);
+$tags = [];
+
+if ($tags_result) {
+    while ($tag = $tags_result->fetch_assoc()) {
+        $tags[] = $tag;
+    }
+} else {
+    error_log("Failed to fetch tags: " . $dbConnection->error);
+}
+
+$categories_query = "SELECT id, name FROM category";
+$categories_result = $dbConnection->query($categories_query);
+$categories = [];
+
+if ($categories_result) {
+    while ($category = $categories_result->fetch_assoc()) {
+        $categories[] = $category;
+    }
+} else {
+    error_log("Failed to fetch categories: " . $dbConnection->error);
+}
+
+$tasks_query = "
+    SELECT t.*, c.name AS category_name 
+    FROM tasks t 
+    LEFT JOIN category c ON t.category = c.id
+    ORDER BY t.start_date DESC
+";
+$tasks_result = $dbConnection->query($tasks_query);
+$tasks = [];
+
+if ($tasks_result) {
+    while ($task = $tasks_result->fetch_assoc()) {
+        $tasks[] = $task;
+    }
+} else {
+    error_log("Failed to fetch tasks: " . $dbConnection->error);
+}
+
+// Close the database connection
+$dbConnection->close();
 ?>
 
 <!DOCTYPE html>
@@ -58,22 +109,20 @@ require_once('./models/tasks_model.php');
                     <h3><i class="fas fa-list"></i> To Do</h3>
                     <div class="task-list"></div>
                     <div class="task-list">
+                      <?php
+                      foreach($tasks as $task) :
+                      ?>
                         <div class="task-card" draggable="true">
-                            <h4>Design new landing page</h4>
-                            <p>Create a modern and engaging landing page for the e-commerce platform.</p>
+                            <h4><?= htmlspecialchars($task['name']) ?></h4>
+                            <p><?= htmlspecialchars($task['description']) ?></p>
                             <div class="task-meta">
-                                <span class="task-project">E-commerce Redesign</span>
-                                <span class="task-due-date"><i class="far fa-calendar"></i> Jun 15</span>
+                                <span class="task-project"><?= htmlspecialchars($task['category_name'] ?? 'Uncategorized') ?></span>
+                                <span class="task-due-date"><i class="far fa-calendar"></i> <?= htmlspecialchars($task['start_date']) ?></span>
                             </div>
                         </div>
-                        <div class="task-card" draggable="true">
-                            <h4>Implement user authentication</h4>
-                            <p>Set up secure user authentication for the mobile app.</p>
-                            <div class="task-meta">
-                                <span class="task-project">Mobile App</span>
-                                <span class="task-due-date"><i class="far fa-calendar"></i> Jun 20</span>
-                            </div>
-                        </div>
+                      <?php
+                      endforeach;
+                      ?>
                     </div>
                 </div>
 
@@ -137,7 +186,7 @@ require_once('./models/tasks_model.php');
                 <div class="form-group">
                     <label for="type">Category</label>
                     <select id="type" name="type">
-
+                     <option value="">Select Category</option>
                         <?php
                         foreach ($categories as $category) {
                             ?>

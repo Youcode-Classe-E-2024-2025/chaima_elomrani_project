@@ -35,29 +35,5 @@ class ProjectController {
         }
     }
 
-    // public function deleteProject($project_id) {
-    //     // Validate project ID
-    //     if (!is_numeric($project_id)) {
-    //         return false;
-    //     }
-
-    //     // Create database connection
-    //     $db = DatabaseConfig::getConnection();
-        
-    //     // Create project model instance
-    //     $project = new sendProject($db);
-        
-    //     // Attempt to delete the project
-    //     if ($project->deleteProject($project_id)) {
-    //         // Redirect to all projects page with success message
-    //         $_SESSION['message'] = "Project deleted successfully.";
-    //         header("Location: index.php?page=all_projects");
-    //         exit();
-    //     } else {
-    //         // Set error message if deletion fails
-    //         $_SESSION['error'] = "Failed to delete project.";
-    //         header("Location: index.php?page=all_projects");
-    //         exit();
-    //     }
-    // }
+   
 }

@@ -20,7 +20,7 @@ class Project
 
     public function displayProjects()
     {
-        $sql = "SELECT * FROM projects"; // Correction : 'decription' devient 'description'
+        $sql = "SELECT * FROM projects"; 
         $result = $this->conn->query($sql);
 
         if ($result) {

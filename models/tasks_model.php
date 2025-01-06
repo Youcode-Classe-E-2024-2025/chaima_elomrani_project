@@ -1,10 +1,79 @@
 <?php
 require_once('./config/connexion.php');
-// Database connection
+class Task
+{
+    private $conn;
+    private $table = 'tasks';
+
+    public $name;
+    public $description;
+    public $start_date;
+    public $end_date;
+    public $status;
+    public $category_id;
+    public $tag_id;
+
+
+
+
+    public function __construct($db)
+    {
+        $this->conn = $db;
+    }
+
+    public function displayTasks()
+    {
+        $sql = "SELECT tasks.*, category.name AS category_name 
+                FROM tasks 
+                LEFT JOIN category ON tasks.category = category.id 
+                ORDER BY tasks.start_date DESC";
+        $result = $this->conn->query($sql);
+
+        if ($result) {
+            return $result->fetch_All(MYSQLI_ASSOC);
+        } else {
+            return [];
+        }
+    }
+
+    public function addTask()
+    {
+        $query = "INSERT INTO tasks (name, description,start_date, end_date , status, category , tag)";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(":task_name", $this->name);
+        $stmt->bindParam(":task_description", $this->description);
+        $stmt->bindParam(":start_date", $this->start_date);
+        $stmt->bindParam(":end_date", $this->end_date);
+        $stmt->bindParam(":status", $this->status);
+        $stmt->bindParam(":category_id", $this->category);
+        $stmt->bindParam(":tag_id", $this->tag);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+}
+
+$database = new mysqli('localhost', 'root', '', 'project_management');
+$sendTask = new Task($database);
+
+
+$viewTasks = new Task($database);
+$tasks = $viewTasks-> displayTasks();
+
+
+
+
+
+
+
 $dbConnection = new mysqli('localhost', 'root', '', 'project_management');
 
 if ($dbConnection->connect_error) {
-    die("Connection failed: " . $dbConnection->connect_error);
+    echo ("Connection failed: " . $dbConnection->connect_error);
 }
 
 $tags_query = "SELECT id, name FROM tags";
