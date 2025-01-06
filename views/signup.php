@@ -8,7 +8,7 @@ include("./controllers/signup_controller.php");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProManage - Sign Up</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./assets/signup.css">
+    <link rel="stylesheet" href="./styles/signup.css">
 </head>
 <body>
     <div class="signup-container">
