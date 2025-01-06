@@ -236,6 +236,7 @@
             <div class="nav-links">
                 <a href="index.php?page=home">Home</a>
                 <a href="index.php?page=dashbord">Dashboard</a>
+                <a href="index.php?page=tasks_page">Tasks</a>
                 <a href="index.php?page=all_projects">All Projects</a>
                 <a href="index.php?page=creat_project" class="active">Create Project</a>
             </div>

@@ -3,19 +3,15 @@ session_start();
 require_once './config/connexion.php';
 require_once './models/projects_model.php';
 
-// Database connection
 $dbConnection = new mysqli('localhost', 'root', '', 'project_management');
 
-// Check connection
 if ($dbConnection->connect_error) {
     die("Connection failed: " . $dbConnection->connect_error);
 }
 
-// Handle delete action
 if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
     $project_id = intval($_GET['id']);
     
-    // Prepare and execute delete query
     $delete_query = "DELETE FROM projects WHERE id = ?";
     $stmt = $dbConnection->prepare($delete_query);
     $stmt->bind_param("i", $project_id);
@@ -26,13 +22,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']))
         $_SESSION['error'] = "Failed to delete project.";
     }
     
-    // Redirect to avoid form resubmission
     header("Location: index.php?page=all_projects");
     exit();
 }
 
-// Fetch projects
-$viewProjects = new ViewProjects($dbConnection);
+$viewProjects = new Project($dbConnection);
 $projects = $viewProjects->displayProjects();
 ?>
 
@@ -305,6 +299,7 @@ $projects = $viewProjects->displayProjects();
             <div class="nav-links">
                 <a href="index.php?page=home">Home</a>
                 <a href="index.php?page=dashbord">Dashboard</a>
+                <a href="index.php?page=tasks_page">Tasks</a>
                 <a href="index.php?page=all_projects">All Projects</a>
                 <a href="index.php?page=creat_project" class="active">Create Project</a>
             </div>

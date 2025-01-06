@@ -5,8 +5,6 @@ require_once('./config/connexion.php');
 $database = new Connexion();
 $connexion = $database->getconnexion();
 
-$
-
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     $projectId = $_POST['project_id'];

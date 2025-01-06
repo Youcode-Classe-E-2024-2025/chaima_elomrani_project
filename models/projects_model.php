@@ -1,15 +1,26 @@
 <?php
 require_once("./config/connexion.php");
 
-class ViewProjects {
+class Project
+{
     private $conn;
+    private $table = 'projects';
 
-    public function __construct($db) {
+    public $name;
+    public $description;
+    public $created_date;
+    public $due_date;
+    public $type;
+
+
+    public function __construct($db)
+    {
         $this->conn = $db;
     }
 
-    public function displayProjects() {
-        $sql = "SELECT name, description, created_date , due_date FROM projects"; // Correction : 'decription' devient 'description'
+    public function displayProjects()
+    {
+        $sql = "SELECT * FROM projects"; // Correction : 'decription' devient 'description'
         $result = $this->conn->query($sql);
 
         if ($result) {
@@ -19,60 +30,49 @@ class ViewProjects {
         }
     }
 
-    public function __destruct() {
-        $this->conn->close();
-    }
-}
 
-// Instanciation de la classe et affichage des projets
-$dbConnection = new mysqli('localhost', 'root', '', 'project_management');
-$sendProject = new sendProject($dbConnection);
-
-$viewProjects = new ViewProjects($dbConnection);
-$projects = $viewProjects->displayProjects();
-
-class sendProject{
-   
-    private $conn;
-    private $table ='projects';
-
-    public $name;
-    public $description;
-    public $created_date;
-    public $due_date;
-    public $type;
-
-    public function __construct($db) {
-        $this->conn = $db;
-    }
-
-    public function addProject (){
+    public function addProject()
+    {
         $query = "INSERT INTO " . $this->table . " (name, description, created_date, due_date, type) VALUES (:project_name, :project_description, :created_date, :due_date, :project_type)";
-        
+
         $stmt = $this->conn->prepare($query);
 
-        $stmt-> bindParam(":project_name", $this->name);
+        $stmt->bindParam(":project_name", $this->name);
         $stmt->bindParam(":project_description", $this->description);
         $stmt->bindParam(":created_date", $this->created_date);
         $stmt->bindParam(":due_date", $this->due_date);
         $stmt->bindParam(":project_type", $this->type);
 
-        if($stmt->execute()){
+        if ($stmt->execute()) {
             return true;
         }
         return false;
 
     }
 
-    public function deleteProject($project_id) {
-        $query = "DELETE FROM " . $this->table . " WHERE id = :project_id";
-        
+
+
+    public function deleteProject($project_id)
+    {
+        $query = "DELETE FROM projects  WHERE id = :project_id";
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":project_id", $project_id, PDO::PARAM_INT);
 
-        if($stmt->execute()){
+        if ($stmt->execute()) {
             return true;
         }
         return false;
     }
+
 }
+
+// Instanciation de la classe et affichage des projets
+$dbConnection = new mysqli('localhost', 'root', '', 'project_management');
+$sendProject = new Project($dbConnection);
+
+
+$viewProjects = new Project($dbConnection);
+$projects = $viewProjects->displayProjects();
+
+

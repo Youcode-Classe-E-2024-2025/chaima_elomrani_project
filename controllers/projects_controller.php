@@ -15,7 +15,7 @@ class ProjectController {
     public function __construct() {
         $database = new connexion();
         $db = $database->getconnexion();
-        $this->project = new sendProject($db);
+        $this->project = new Project($db);
     }
 
     public function createProject($data) {
@@ -27,35 +27,37 @@ class ProjectController {
         $this->project->chef_id = 1; 
 
         if($this->project->addProject()) {
+            header("Location: index.php?page=all_projects");
             return true;
         } else {
+            header("Location: index.php?page=admin_home");
             return false;
         }
     }
 
-    public function deleteProject($project_id) {
-        // Validate project ID
-        if (!is_numeric($project_id)) {
-            return false;
-        }
+    // public function deleteProject($project_id) {
+    //     // Validate project ID
+    //     if (!is_numeric($project_id)) {
+    //         return false;
+    //     }
 
-        // Create database connection
-        $db = DatabaseConfig::getConnection();
+    //     // Create database connection
+    //     $db = DatabaseConfig::getConnection();
         
-        // Create project model instance
-        $project = new sendProject($db);
+    //     // Create project model instance
+    //     $project = new sendProject($db);
         
-        // Attempt to delete the project
-        if ($project->deleteProject($project_id)) {
-            // Redirect to all projects page with success message
-            $_SESSION['message'] = "Project deleted successfully.";
-            header("Location: index.php?page=all_projects");
-            exit();
-        } else {
-            // Set error message if deletion fails
-            $_SESSION['error'] = "Failed to delete project.";
-            header("Location: index.php?page=all_projects");
-            exit();
-        }
-    }
+    //     // Attempt to delete the project
+    //     if ($project->deleteProject($project_id)) {
+    //         // Redirect to all projects page with success message
+    //         $_SESSION['message'] = "Project deleted successfully.";
+    //         header("Location: index.php?page=all_projects");
+    //         exit();
+    //     } else {
+    //         // Set error message if deletion fails
+    //         $_SESSION['error'] = "Failed to delete project.";
+    //         header("Location: index.php?page=all_projects");
+    //         exit();
+    //     }
+    // }
 }
