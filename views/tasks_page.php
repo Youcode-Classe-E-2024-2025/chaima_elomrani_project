@@ -1,5 +1,4 @@
 <?php
-require_once('./controllers/task_controller.php');
 require_once('./models/tasks_model.php');
 ?>
 
@@ -90,7 +89,7 @@ require_once('./models/tasks_model.php');
         <div class="modal-content">
             <span class="close" id="close">&times;</span>
             <h2>Add New Task</h2>
-            <form id="taskForm" action="index.php" method="POST">
+            <form id="taskForm" action="index.php?action=task_controller" method="POST">
                 <input type="hidden" name="action" value="add_task">
                 <div class="form-group">
                     <label for="title">Title</label>
