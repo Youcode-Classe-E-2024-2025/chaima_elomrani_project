@@ -188,6 +188,39 @@ main {
     margin-bottom: 0.5rem;
 }
 
+  .tag {
+   
+    background-color: #ff4d4d;
+    color: white;
+    padding: 2px 5px;
+    font-size: 0.7em;
+    border-radius: 10px;
+  }
+  
+  
+  .delete-btn {
+    /* display: flex;
+    flex-direction:row; */
+    /* gap: 20px; */
+    position: absolute;
+    right: 50px;
+    top: 15px;
+    width: 20px;
+    height: 25px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: red;
+    font-size: 1rem;
+    /* transition: color 0.3s ease; */
+
+}
+
+.delete-btn:hover {
+    color: darkred;
+}
+
+
 .task-meta {
     display: flex;
     justify-content: space-between;

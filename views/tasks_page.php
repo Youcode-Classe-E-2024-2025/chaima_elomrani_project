@@ -1,5 +1,6 @@
 <?php
 require_once('./models/tasks_model.php');
+require_once('./controllers/delete_task.php');
 ?>
 
 <!DOCTYPE html>
@@ -19,11 +20,11 @@ require_once('./models/tasks_model.php');
         <div class="container nav-container">
             <a href="#" class="logo">ProManage</a>
             <div class="nav-links">
-                <a href="home.php">Home</a>
-                <a href="dashbord.php">Dashboard</a>
-                <a href="first_page.php">All Projects</a>
-                <a href="mytasks.php" class="active">My Tasks</a>
-                <a href="creat_project.php">Create Project</a>
+                <a href="index.php?page=admin_home">Home</a>
+                <a href="index.php?page=dashbord">Dashboard</a>
+                <a href="index.php?page=tasks_page">Tasks</a>
+                <a href="index.php?page=all_projects">All Projects</a>
+                <a href="index.php?page=creat_project" class="active">Create Project</a>
             </div>
             <div class="user-menu">
                 <button class="user-menu-btn">
@@ -55,31 +56,96 @@ require_once('./models/tasks_model.php');
                     <h3><i class="fas fa-list"></i> To Do</h3>
                     <div class="task-list"></div>
                     <div class="task-list">
-                      <?php
-                      foreach($tasks as $task) :
-                      ?>
-                        <div class="task-card" draggable="true">
-                            <h4><?= htmlspecialchars($task['name']) ?></h4>
-                            <p><?= htmlspecialchars($task['description']) ?></p>
-                            <div class="task-meta">
-                                <span class="task-project"><?= htmlspecialchars($task['category_name'] ?? 'Uncategorized') ?></span>
-                                <span class="task-due-date"><i class="far fa-calendar"></i> <?= htmlspecialchars($task['start_date']) ?></span>
-                            </div>
-                        </div>
-                      <?php
-                      endforeach;
-                      ?>
+                        <?php
+                        foreach ($tasks as $task):
+                            if ($task['status'] === 'ToDo'):
+                                ?>
+                                <div class="task-card" draggable="true">
+                                    <form method="POST" action="index.php?action=delete_task"
+                                        onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                        <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
+                                        <button type="submit" class="delete-btn">
+                                            <i class="fa-solid fa-trash icon"></i>
+                                        </button>
+                                    </form>
+                                    <h4><?= htmlspecialchars($task['name']) ?></h4>
+                                    <!-- <span class="tag">urgent</span> -->
+                                    <p><?= htmlspecialchars($task['description']) ?></p>
+                                    <div class="task-meta">
+                                        <span
+                                            class="task-project"><?= htmlspecialchars($task['category_name'] ?? 'Uncategorized') ?></span>
+                                        <span class="task-due-date"><i class="far fa-calendar"></i>
+                                            <?= htmlspecialchars($task['start_date']) ?></span>
+                                    </div>
+                                </div>
+                                <?php
+                            endif;
+                        endforeach;
+                        ?>
                     </div>
                 </div>
 
+
                 <div class="task-column" id="inprogress-column">
                     <h3><i class="fas fa-spinner"></i> In Progress</h3>
-                    <div class="task-list"></div>
+                    <div class="task-list">
+                        <?php
+                        foreach ($tasks as $task):
+                            if ($task['status'] === 'In Progress'):
+                                ?>
+                                <div class="task-card" draggable="true">
+                                    <form method="POST" action="index.php?action=delete_task"
+                                        onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                        <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
+                                        <button type="submit" class="delete-btn">
+                                            <i class="fa-solid fa-trash icon"></i>
+                                        </button>
+                                    </form>
+                                    <h4><?= htmlspecialchars($task['name']) ?></h4>
+                                    <p><?= htmlspecialchars($task['description']) ?></p>
+                                    <div class="task-meta">
+                                        <span
+                                            class="task-project"><?= htmlspecialchars($task['category_name'] ?? 'Uncategorized') ?></span>
+                                        <span class="task-due-date"><i class="far fa-calendar"></i>
+                                            <?= htmlspecialchars($task['start_date']) ?></span>
+                                    </div>
+                                </div>
+                                <?php
+                            endif;
+                        endforeach;
+                        ?>
+                    </div>
                 </div>
 
                 <div class="task-column" id="done-column">
                     <h3><i class="fas fa-check"></i> Done</h3>
-                    <div class="task-list"></div>
+                    <div class="task-list">
+                        <?php
+                        foreach ($tasks as $task):
+                            if ($task['status'] === 'Done'):
+                                ?>
+                                <div class="task-card" draggable="true">
+                                    <form method="POST" action="index.php?action=delete_task"
+                                        onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                        <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
+                                        <button type="submit" class="delete-btn">
+                                            <i class="fa-solid fa-trash icon"></i>
+                                        </button>
+                                    </form>
+                                    <h4><?= htmlspecialchars($task['name']) ?></h4>
+                                    <p><?= htmlspecialchars($task['description']) ?></p>
+                                    <div class="task-meta">
+                                        <span
+                                            class="task-project"><?= htmlspecialchars($task['category_name'] ?? 'Uncategorized') ?></span>
+                                        <span class="task-due-date"><i class="far fa-calendar"></i>
+                                            <?= htmlspecialchars($task['start_date']) ?></span>
+                                    </div>
+                                </div>
+                                <?php
+                            endif;
+                        endforeach;
+                        ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -122,21 +188,25 @@ require_once('./models/tasks_model.php');
                         <?php
                         foreach ($tags as $tag) {
                             ?>
-                            <option value="<?php echo htmlspecialchars($tag['id']) ?>"><?php echo htmlspecialchars($tag['name']) ?></option>
+                            <option value="<?php echo htmlspecialchars($tag['id']) ?>">
+                                <?php echo htmlspecialchars($tag['name']) ?>
+                            </option>
                             <?php
                         }
                         ?>
-                       
+
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="type">Category</label>
                     <select id="type" name="type">
-                     <option value="">Select Category</option>
+                        <option value="">Select Category</option>
                         <?php
                         foreach ($categories as $category) {
                             ?>
-                            <option value="<?php echo htmlspecialchars($category['id']) ?>"><?php echo htmlspecialchars($category['name']) ?></option>
+                            <option value="<?php echo htmlspecialchars($category['id']) ?>">
+                                <?php echo htmlspecialchars($category['name']) ?>
+                            </option>
                             <?php
                         }
                         ?>
