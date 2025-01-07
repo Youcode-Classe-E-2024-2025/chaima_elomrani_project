@@ -23,10 +23,7 @@ class Task
 
     public function displayTasks()
     {
-        $sql = "SELECT tasks.*, category.name AS category_name 
-                FROM tasks 
-                LEFT JOIN category ON tasks.category = category.id 
-                ORDER BY tasks.start_date DESC";
+        $sql = "SELECT tasks.*, category.name AS category_name FROM tasks LEFT JOIN category ON tasks.category = category.id ORDER BY tasks.start_date DESC";
         $result = $this->conn->query($sql);
 
         if ($result) {
@@ -47,8 +44,8 @@ class Task
         $stmt->bindParam(":start_date", $this->start_date);
         $stmt->bindParam(":end_date", $this->end_date);
         $stmt->bindParam(":status", $this->status);
-        $stmt->bindParam(":category_id", $this->category);
-        $stmt->bindParam(":tag_id", $this->tag);
+        $stmt->bindParam(":category_id", $this->category_id);
+        $stmt->bindParam(":tag_id", $this->tag_id);
 
         if ($stmt->execute()) {
             return true;

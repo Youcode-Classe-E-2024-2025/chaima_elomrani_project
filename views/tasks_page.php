@@ -1,59 +1,6 @@
 <?php
-require_once('./config/connexion.php');
 require_once('./controllers/task_controller.php');
 require_once('./models/tasks_model.php');
-
-// Database connection
-$dbConnection = new mysqli('localhost', 'root', '', 'project_management');
-
-if ($dbConnection->connect_error) {
-    die("Connection failed: " . $dbConnection->connect_error);
-}
-
-// Fetch tags from the database
-$tags_query = "SELECT id, name FROM tags";
-$tags_result = $dbConnection->query($tags_query);
-$tags = [];
-
-if ($tags_result) {
-    while ($tag = $tags_result->fetch_assoc()) {
-        $tags[] = $tag;
-    }
-} else {
-    error_log("Failed to fetch tags: " . $dbConnection->error);
-}
-
-$categories_query = "SELECT id, name FROM category";
-$categories_result = $dbConnection->query($categories_query);
-$categories = [];
-
-if ($categories_result) {
-    while ($category = $categories_result->fetch_assoc()) {
-        $categories[] = $category;
-    }
-} else {
-    error_log("Failed to fetch categories: " . $dbConnection->error);
-}
-
-$tasks_query = "
-    SELECT t.*, c.name AS category_name 
-    FROM tasks t 
-    LEFT JOIN category c ON t.category = c.id
-    ORDER BY t.start_date DESC
-";
-$tasks_result = $dbConnection->query($tasks_query);
-$tasks = [];
-
-if ($tasks_result) {
-    while ($task = $tasks_result->fetch_assoc()) {
-        $tasks[] = $task;
-    }
-} else {
-    error_log("Failed to fetch tasks: " . $dbConnection->error);
-}
-
-// Close the database connection
-$dbConnection->close();
 ?>
 
 <!DOCTYPE html>
