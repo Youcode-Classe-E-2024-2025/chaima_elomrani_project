@@ -38,12 +38,13 @@ class Task
 
     public function addTask()
     {
-        $query = "INSERT INTO tasks (name, description,start_date, end_date , status, category , tag)";
+        $query = "INSERT INTO tasks (name, description,start_date, due_date , status, category , tag)
+                VALUES(:name, :description, :start_date, :end_date, :status, :category_id, :tag_id)";
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(":task_name", $this->name);
-        $stmt->bindParam(":task_description", $this->description);
+        $stmt->bindParam(":name", $this->name);
+        $stmt->bindParam(":description", $this->description);
         $stmt->bindParam(":start_date", $this->start_date);
         $stmt->bindParam(":end_date", $this->end_date);
         $stmt->bindParam(":status", $this->status);
@@ -55,6 +56,8 @@ class Task
         }
         return false;
     }
+
+    
 }
 
 $database = new mysqli('localhost', 'root', '', 'project_management');
