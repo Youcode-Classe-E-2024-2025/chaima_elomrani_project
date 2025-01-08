@@ -1,6 +1,5 @@
 <?php
-// require_once('./config/connexion.php');
-// require_once('./controllers/task_controller.php');
+require_once('./config/connexion.php');
 class Task
 {
     private $conn;
@@ -9,7 +8,7 @@ class Task
     public $name;
     public $description;
     public $start_date;
-    public $due_date;
+    public $end_date;
     public $status;
     public $category;
     public $tag;
@@ -24,7 +23,10 @@ class Task
 
     public function displayTasks()
     {
-        $sql = "SELECT tasks.*, category.name AS category_name FROM tasks LEFT JOIN category ON tasks.category = category.id ORDER BY tasks.start_date DESC";
+        $sql = "SELECT tasks.*, category.name AS category_name 
+                FROM tasks 
+                LEFT JOIN category ON tasks.category = category.id 
+                ORDER BY tasks.start_date DESC";
         $result = $this->conn->query($sql);
 
         if ($result) {
@@ -36,18 +38,17 @@ class Task
 
     public function addTask()
     {
-        $query = "INSERT INTO tasks (name, description, start_date, due_date, status, category, tag) 
-                  VALUES (:task_name, :task_description, :start_date, :due_date, :status, :category, :tag)";
+        $query = "INSERT INTO tasks (name, description,start_date, end_date , status, category , tag)";
 
         $stmt = $this->conn->prepare($query);
 
         $stmt->bindParam(":task_name", $this->name);
         $stmt->bindParam(":task_description", $this->description);
         $stmt->bindParam(":start_date", $this->start_date);
-        $stmt->bindParam(":due_date", $this->due_date);
+        $stmt->bindParam(":end_date", $this->end_date);
         $stmt->bindParam(":status", $this->status);
-        $stmt->bindParam(":category", $this->category);
-        $stmt->bindParam(":tag", $this->tag);
+        $stmt->bindParam(":category_id", $this->category);
+        $stmt->bindParam(":tag_id", $this->tag);
 
         if ($stmt->execute()) {
             return true;

@@ -11,6 +11,9 @@ require_once('./controllers/delete_task.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProManage - My Tasks</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="./styles/tasks.css">
 
 </head>
@@ -61,13 +64,21 @@ require_once('./controllers/delete_task.php');
                             if ($task['status'] === 'ToDo'):
                                 ?>
                                 <div class="task-card" draggable="true">
-                                    <form method="POST" action="index.php?action=delete_task"
-                                        onsubmit="return confirm('Are you sure you want to delete this project?');">
-                                        <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
-                                        <button type="submit" class="delete-btn">
-                                            <i class="fa-solid fa-trash icon"></i>
-                                        </button>
-                                    </form>
+                                    <div class="icons">
+                                        <form method="POST" action="index.php?action=delete_task"
+                                            onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                            <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
+                                            <button type="submit" class="delete-btn">
+                                                <i class="fa-solid fa-trash icon"></i>
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="index.php?action=edit_task">
+                                            <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
+                                            <button type="submit" class="update-btn">
+                                                <i class="fa-regular fa-pen-to-square"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                     <h4><?= htmlspecialchars($task['name']) ?></h4>
                                     <!-- <span class="tag">urgent</span> -->
                                     <p><?= htmlspecialchars($task['description']) ?></p>
@@ -94,13 +105,21 @@ require_once('./controllers/delete_task.php');
                             if ($task['status'] === 'In Progress'):
                                 ?>
                                 <div class="task-card" draggable="true">
-                                    <form method="POST" action="index.php?action=delete_task"
-                                        onsubmit="return confirm('Are you sure you want to delete this project?');">
-                                        <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
-                                        <button type="submit" class="delete-btn">
-                                            <i class="fa-solid fa-trash icon"></i>
-                                        </button>
-                                    </form>
+                                    <div class="icons">
+                                        <form method="POST" action="index.php?action=delete_task"
+                                            onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                            <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
+                                            <button type="submit" class="delete-btn">
+                                                <i class="fa-solid fa-trash icon"></i>
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="index.php?action=edit_task">
+                                            <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
+                                            <button type="submit" class="update-btn">
+                                                <i class="fa-regular fa-pen-to-square"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                     <h4><?= htmlspecialchars($task['name']) ?></h4>
                                     <p><?= htmlspecialchars($task['description']) ?></p>
                                     <div class="task-meta">
@@ -124,14 +143,23 @@ require_once('./controllers/delete_task.php');
                         foreach ($tasks as $task):
                             if ($task['status'] === 'Done'):
                                 ?>
+
                                 <div class="task-card" draggable="true">
-                                    <form method="POST" action="index.php?action=delete_task"
-                                        onsubmit="return confirm('Are you sure you want to delete this project?');">
-                                        <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
-                                        <button type="submit" class="delete-btn">
-                                            <i class="fa-solid fa-trash icon"></i>
-                                        </button>
-                                    </form>
+                                    <div class="icons">
+                                        <form method="POST" action="index.php?action=delete_task"
+                                            onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                            <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
+                                            <button type="submit" class="delete-btn">
+                                                <i class="fa-solid fa-trash icon"></i>
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="index.php?action= edit_task">
+                                            <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
+                                            <button type="submit" class="update-btn">
+                                                <i class="fa-regular fa-pen-to-square"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                     <h4><?= htmlspecialchars($task['name']) ?></h4>
                                     <p><?= htmlspecialchars($task['description']) ?></p>
                                     <div class="task-meta">
@@ -229,3 +257,90 @@ require_once('./controllers/delete_task.php');
         </div>
     </div>
     <script src="./js/tasks.js"></script>
+
+    {{ ... }}
+    </div>
+</main>
+
+<!-- Update Task Modal -->
+<div id="updateTaskModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Update Task</h2>
+        <form id="updateTaskForm" method="POST" action="index.php?action=update_task">
+            <input type="hidden" id="update-task-id" name="task_id" value="">
+            
+            <div class="form-group">
+                <label for="update-task-name">Task Name</label>
+                <input type="text" id="update-task-name" name="task_name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="update-task-description">Description</label>
+                <textarea id="update-task-description" name="task_description" rows="4"></textarea>
+            </div>
+            
+            <div class="form-group">
+                    <label for="type">Tag</label>
+                    <select id="type" name="type" multiple>
+
+                        <?php
+                        foreach ($tags as $tag) {
+                            ?>
+                            <option value="<?php echo htmlspecialchars($tag['id']) ?>">
+                                <?php echo htmlspecialchars($tag['name']) ?>
+                            </option>
+                            <?php
+                        }
+                        ?>
+
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="type">Category</label>
+                    <select id="type" name="type">
+                        <option value="">Select Category</option>
+                        <?php
+                        foreach ($categories as $category) {
+                            ?>
+                            <option value="<?php echo htmlspecialchars($category['id']) ?>">
+                                <?php echo htmlspecialchars($category['name']) ?>
+                            </option>
+                            <?php
+                        }
+                        ?>
+
+                    </select>
+                </div>
+            
+            <div class="form-group">
+                <label for="update-task-status">Status</label>
+                <select id="update-task-status" name="task_status">
+                    <option value="ToDo">To Do</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Done">Done</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="update-task-start-date">Start Date</label>
+                <input type="date" id="update-task-start-date" name="task_start_date">
+            </div>
+            
+            <div class="form-group">
+                <label for="update-task-due-date">Due Date</label>
+                <input type="date" id="update-task-due-date" name="task_due_date">
+            </div>
+            
+            <button type="submit" class="update">Update Task</button>
+        </form>
+    </div>
+</div>
+
+<script src="./js/tasks.js" ></script>
+
+
+</body>
+</html>
+
+   

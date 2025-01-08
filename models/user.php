@@ -3,18 +3,18 @@
 class User
 {
     private $conn;
-    private $table = 'users'; // Define the table name explicitly
+    private $table = 'users'; 
 
     public $id;
     public $name;
     public $email;
     public $password;
-    public $role; // Add role property
+    public $role; 
 
     public function __construct(PDO $db)
     {
         $this->conn = $db;
-        $this->role = 2; // Default to team_member (assuming role 2 is team_member)
+        $this->role = 2; 
     }
 
     private function validateInput()
@@ -43,38 +43,30 @@ class User
 
     public function signup()
     {
-        // Validate input first
         if (!$this->validateInput()) {
             return "Invalid input. Please check your details.";
         }
 
-        // Check if email already exists
         if ($this->uniqueEmail($this->email)) {
             return "Email already exists. Try another one!";
         }
 
-        // Prepare insertion query - include role
         $query = "INSERT INTO " . $this->table . " (name, email, password, role) VALUES (:name, :email, :password, :role)";
         $stmt = $this->conn->prepare($query);
 
-        // Hash the password
         $hashed_password = password_hash($this->password, PASSWORD_DEFAULT);
 
-        // Bind parameters correctly
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':email', $this->email);
         $stmt->bindParam(':password', $hashed_password);
         $stmt->bindParam(':role', $this->role, PDO::PARAM_INT);
 
 
-        // Debug: Add error info reporting
         $stmt->execute();
 
-        // Check if any rows were affected
         if ($stmt->rowCount() > 0) {
             return "Welcome to our site!";
         } else {
-            // Log the full error details
             $errorInfo = $stmt->errorInfo();
             error_log("Signup failed: " . print_r($errorInfo, true));
             return "An error occurred during registration.";
@@ -84,7 +76,6 @@ class User
 
     public function login()
     {
-        // Validate input first
         if (!$this->validateInput()) {
             return [
                 "status" => "error",
@@ -92,7 +83,6 @@ class User
             ];
         }
 
-        // Regular login process
         $query = "SELECT id, email, password, role FROM " . $this->table . " WHERE email = :email LIMIT 1";
         $stmt = $this->conn->prepare($query);
 
@@ -101,7 +91,6 @@ class User
 
         $stmt->execute();
 
-        // Verify if user exists 
         if ($stmt->rowCount() > 0) {
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
