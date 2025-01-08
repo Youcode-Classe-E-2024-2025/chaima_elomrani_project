@@ -57,6 +57,38 @@ class Task
         return false;
     }
 
+    public function updateTask($id, $name, $description, $start_date, $due_date, $status, $category, $tag) {
+        $query = "UPDATE tasks SET 
+                  name = ?, 
+                  description = ?, 
+                  start_date = ?, 
+                  due_date = ?, 
+                  status = ?, 
+                  category = ?, 
+                  tag = ? 
+                  WHERE id = ?";
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bind_param('sssssiis', 
+            $name, 
+            $description, 
+            $start_date, 
+            $due_date, 
+            $status, 
+            $category, 
+            $tag, 
+            $id
+        );
+
+        try {
+            return $stmt->execute();
+        } catch(Exception $e) {
+            error_log("Update Task Error: " . $e->getMessage());
+            return false;
+        }
+    }
+
     
 }
 
