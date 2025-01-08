@@ -11,17 +11,17 @@ if ($dbConnection->connect_error) {
 
 if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
     $project_id = intval($_GET['id']);
-    
+
     $delete_query = "DELETE FROM projects WHERE id = ?";
     $stmt = $dbConnection->prepare($delete_query);
     $stmt->bind_param("i", $project_id);
-    
+
     if ($stmt->execute()) {
         $_SESSION['message'] = "Project deleted successfully.";
     } else {
         $_SESSION['error'] = "Failed to delete project.";
     }
-    
+
     header("Location: index.php?page=all_projects");
     exit();
 }
@@ -32,6 +32,7 @@ $projects = $viewProjects->displayProjects();
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -289,6 +290,45 @@ $projects = $viewProjects->displayProjects();
             background-color: #f2dede;
             color: #a94442;
         }
+
+        .icons {
+            display: flex;
+            flex-direction: row;
+        
+        }
+
+        .delete-btn {
+            /* display: flex;
+    flex-direction:row; */
+            /* gap: 20px; */
+
+            width: 20px;
+            height: 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: red;
+            font-size: 1rem;
+            position: absolute;
+            top: 12%;
+            /* transition: color 0.3s ease; */
+
+        }
+
+        .delete-btn:hover {
+            color: darkred;
+        }
+
+
+        .update-btn {
+            width: 20px;
+            height: 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: green;
+            font-size: 1rem;
+        }
     </style>
 </head>
 
@@ -326,21 +366,21 @@ $projects = $viewProjects->displayProjects();
         </div>
 
         <div class="container">
-            <?php 
+            <?php
             // Display success or error messages
             if (isset($_SESSION['message'])): ?>
                 <div class="message success-message">
-                    <?php 
-                    echo $_SESSION['message']; 
+                    <?php
+                    echo $_SESSION['message'];
                     unset($_SESSION['message']);
                     ?>
                 </div>
             <?php endif; ?>
-            
+
             <?php if (isset($_SESSION['error'])): ?>
                 <div class="message error-message">
-                    <?php 
-                    echo $_SESSION['error']; 
+                    <?php
+                    echo $_SESSION['error'];
                     unset($_SESSION['error']);
                     ?>
                 </div>
@@ -349,14 +389,21 @@ $projects = $viewProjects->displayProjects();
             <div class="projects-grid">
                 <?php foreach ($projects as $project): ?>
                     <div class="project-card">
-                        <form method="POST" action="index.php?action=delete"
-                            onsubmit="return confirm('Are you sure you want to delete this project?');">
-                            <input type="hidden" name="project_id" value="<?= htmlspecialchars($project['id']) ?>">
-                            <button type="submit" class="delete-btn">
-                                <i class="fa-solid fa-trash icon"></i>
-                            </button>
-                        </form>
-                        <img src="images/update_icon.svg" class="update_icon" alt="">
+                        <div class="icons">
+                            <form method="POST" action="index.php?action=delete"
+                                onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                <input type="hidden" name="project_id" value="<?= htmlspecialchars($project['id']) ?>">
+                                <button type="submit" class="delete-btn">
+                                    <i class="fa-solid fa-trash icon"></i>
+                                </button>
+                            </form>
+                            <form method="POST" action="index.php?action=edit_task">
+                                <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
+                                <button type="submit" class="update-btn">
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                </button>
+                            </form>
+                        </div>
                         <h3><?= htmlspecialchars($project['name']) ?></h3>
 
                         <div class="project-card-content">
@@ -365,6 +412,10 @@ $projects = $viewProjects->displayProjects();
                         <div class="project-card-footer">
                             <span class="project-status"> created in:
                                 <?= htmlspecialchars($project['created_date']) ?></span>
+                        </div>
+                        <div>
+                            <p><b>Assigned people: <span>chaima elomrani , malak elomrani</span></b></p>
+
                         </div>
                     </div>
                 <?php endforeach; ?>
