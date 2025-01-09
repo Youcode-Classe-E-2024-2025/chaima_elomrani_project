@@ -42,10 +42,6 @@ class ProjectController
 
 
 
-
-
-
-
     public function editProject()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

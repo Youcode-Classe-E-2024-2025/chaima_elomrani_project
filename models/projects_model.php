@@ -71,7 +71,7 @@ class Project
        $query="UPDATE projects SET id =?, name =?, description =?, due_date=?";
        $stmt = $this->conn->prepare($query);
 
-       $stmt->bindParam("siis",$id,$name,$description,$type,$due_date);
+       $stmt->bindParam("siis",$id,$name,$description,$due_date);
 
        try{
         return $stmt->execute();

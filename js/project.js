@@ -1,5 +1,4 @@
 
-// User menu toggle
 const userMenuBtn = document.querySelector('.user-menu-btn');
 const userMenuContent = document.querySelector('.user-menu-content');
 
@@ -7,14 +6,12 @@ userMenuBtn.addEventListener('click', () => {
     userMenuContent.style.display = userMenuContent.style.display === 'block' ? 'none' : 'block';
 });
 
-// Close user menu when clicking outside
 document.addEventListener('click', (event) => {
     if (!event.target.closest('.user-menu')) {
         userMenuContent.style.display = 'none';
     }
 });
 
-// Animate project cards on scroll
 const projectCards = document.querySelectorAll('.project-card');
 
 const animateOnScroll = (entries, observer) => {
@@ -40,15 +37,6 @@ projectCards.forEach(card => {
     card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
     observer.observe(card);
 });
-
-
-
-
-
-
-
-
-
 
 
 
@@ -113,11 +101,7 @@ projectForm.addEventListener('submit', (e) => {
     alert('Project saved successfully!');
 });
 
-closeBtn.addEventListener('click', () => {
-    if (confirm('Are you sure you want to close? All unsaved changes will be lost.')) {
-        console.log('Closing form...');
-    }
-});
+
 
 
 document.addEventListener('DOMContentLoaded' , () => {
@@ -127,10 +111,22 @@ document.addEventListener('DOMContentLoaded' , () => {
         editbtns.forEach(btn => {
             btn.addEventListener('click',()=>{                
                 editForm.style.display='block';
-            })
+            });
             
         });
-})
+
+        const closeBtn = document.getElementById('close-btn');
+        const editform = document.getElementById('edit-form');
+        closeBtn.addEventListener('click', () => {
+            editform.style.display = 'none';
+        });
+});
+
+
+
+
+
+
 
 
 

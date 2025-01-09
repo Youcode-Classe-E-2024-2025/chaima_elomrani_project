@@ -323,6 +323,7 @@ require_once './models/projects_model.php';
             overflow: hidden;
         }
 
+
         .update-project-form .form-content {
             max-height: calc(90vh - 150px);
             overflow-y: auto;
@@ -345,6 +346,13 @@ require_once './models/projects_model.php';
 
         .update-project-form .form-content::-webkit-scrollbar-thumb:hover {
             background: #2a6f70;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: rgb(255, 0, 0);
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 
@@ -505,10 +513,7 @@ require_once './models/projects_model.php';
     </form>
 
 
-    <script src="js/project.js">
-        
-
-    </script>
+    <script src="js/project.js"></script>
 
 
 </body>

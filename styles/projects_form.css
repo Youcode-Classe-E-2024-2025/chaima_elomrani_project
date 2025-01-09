@@ -133,9 +133,3 @@ textarea {
     }
 }
 
-.close-btn:hover,
-.close-btn:focus {
-    color: rgb(255, 0, 0);
-    text-decoration: none;
-    cursor: pointer;
-}
