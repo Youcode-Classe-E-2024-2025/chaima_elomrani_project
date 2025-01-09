@@ -111,7 +111,7 @@
             <h2>Public Projects</h2>
             <div class="project-grid">
                 <div class="project-card">
-                    <img src="./images/image1.jpg" alt="Project 1" class="project-image">
+                    <img src="../images/image1.jpg" alt="Project 1" class="project-image">
                     <div class="project-info">
                         <h3>E-commerce Platform</h3>
                         <p>A scalable e-commerce solution for small businesses.</p>

@@ -59,7 +59,7 @@ class UpdateTaskController {
     }
 }
 
-// Handle the update task action
+
 if (isset($_GET['action']) && $_GET['action'] === 'update_task') {
     $updateTaskController = new UpdateTaskController();
     $updateTaskController->updateTask();

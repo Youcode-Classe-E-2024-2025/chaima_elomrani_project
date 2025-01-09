@@ -65,9 +65,32 @@ class Project
         return false;
     }
 
+
+
+    public function updateProject($id,$name, $description,$type,$due_date){
+       $query="UPDATE projects SET id =?, name =?, description =?, due_date=?";
+       $stmt = $this->conn->prepare($query);
+
+       $stmt->bindParam("siis",$id,$name,$description,$type,$due_date);
+
+       try{
+        return $stmt->execute();
+       }catch(PDOException $e){
+        error_log('error',$e->getMessage());
+        return false;
+       }
+    }
+
 }
 
-// Instanciation de la classe et affichage des projets
+
+
+
+
+
+
+
+
 $dbConnection = new mysqli('localhost', 'root', '', 'project_management');
 $sendProject = new Project($dbConnection);
 

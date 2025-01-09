@@ -3,33 +3,7 @@ session_start();
 require_once './config/connexion.php';
 require_once './models/projects_model.php';
 
-$dbConnection = new mysqli('localhost', 'root', '', 'project_management');
-
-if ($dbConnection->connect_error) {
-    die("Connection failed: " . $dbConnection->connect_error);
-}
-
-if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id'])) {
-    $project_id = intval($_GET['id']);
-
-    $delete_query = "DELETE FROM projects WHERE id = ?";
-    $stmt = $dbConnection->prepare($delete_query);
-    $stmt->bind_param("i", $project_id);
-
-    if ($stmt->execute()) {
-        $_SESSION['message'] = "Project deleted successfully.";
-    } else {
-        $_SESSION['error'] = "Failed to delete project.";
-    }
-
-    header("Location: index.php?page=all_projects");
-    exit();
-}
-
-$viewProjects = new Project($dbConnection);
-$projects = $viewProjects->displayProjects();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,6 +12,7 @@ $projects = $viewProjects->displayProjects();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProManage - All Projects</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./styles/projects_form.css">
     <style>
         :root {
             --bg-primary: #f5f5f5;
@@ -294,7 +269,7 @@ $projects = $viewProjects->displayProjects();
         .icons {
             display: flex;
             flex-direction: row;
-        
+
         }
 
         .delete-btn {
@@ -329,7 +304,50 @@ $projects = $viewProjects->displayProjects();
             color: green;
             font-size: 1rem;
         }
+
+        .update-project-form {
+            width: 500px;
+            max-width: 90%;
+            max-height: 90vh;
+            margin: 0 auto;
+            background-color: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1100;
+            display: none;
+            overflow: hidden;
+        }
+
+        .update-project-form .form-content {
+            max-height: calc(90vh - 150px);
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        .update-project-form .form-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .update-project-form .form-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .update-project-form .form-content::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 10px;
+        }
+
+        .update-project-form .form-content::-webkit-scrollbar-thumb:hover {
+            background: #2a6f70;
+        }
     </style>
+
 </head>
 
 <body>
@@ -390,6 +408,7 @@ $projects = $viewProjects->displayProjects();
                 <?php foreach ($projects as $project): ?>
                     <div class="project-card">
                         <div class="icons">
+                            <!-- delete -->
                             <form method="POST" action="index.php?action=delete"
                                 onsubmit="return confirm('Are you sure you want to delete this project?');">
                                 <input type="hidden" name="project_id" value="<?= htmlspecialchars($project['id']) ?>">
@@ -397,12 +416,19 @@ $projects = $viewProjects->displayProjects();
                                     <i class="fa-solid fa-trash icon"></i>
                                 </button>
                             </form>
-                            <form method="POST" action="index.php?action=edit_task">
-                                <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
-                                <button type="submit" class="update-btn">
-                                    <i class="fa-regular fa-pen-to-square"></i>
-                                </button>
+                            <!-- update -->
+                            <form method="POST" action="index.php?action=projects_controller">
+                                <input type="hidden" name="project_id" value="<?= htmlspecialchars($project['id']) ?>">
+                                <input type="hidden" name="project_name" value="<?= htmlspecialchars($project['name']) ?>">
+                                <input type="hidden" name="project_description"
+                                    value="<?= htmlspecialchars($project['description']) ?>">
+                                <input type="hidden" name="project_due_date"
+                                    value="<?= htmlspecialchars($project['due_date']) ?>">
+
                             </form>
+                            <button type="button" id="editbtn" class="update-btn">
+                                <i class="fa-regular fa-pen-to-square"></i>
+                            </button>
                         </div>
                         <h3><?= htmlspecialchars($project['name']) ?></h3>
 
@@ -423,49 +449,68 @@ $projects = $viewProjects->displayProjects();
         </div>
     </main>
 
-    <script>
-        // User menu toggle
-        const userMenuBtn = document.querySelector('.user-menu-btn');
-        const userMenuContent = document.querySelector('.user-menu-content');
 
-        userMenuBtn.addEventListener('click', () => {
-            userMenuContent.style.display = userMenuContent.style.display === 'block' ? 'none' : 'block';
-        });
+    <!-- ********* update form ******** -->
+    <form class="update-project-form" id="edit-form" method="POST" action="index.php?action=projects_controller">
+        <div class="form-header">
+            <h1 class="create-project-title">Project Details</h1>
+            <button type="button" class="close-btn" id="close-btn">&times;</button>
+        </div>
+        <div class="form-content">
+            <div class="form-group">
+                <label for="project-name">Project Name</label>
+                <input type="text" id="project-name" name="project-name" required>
+            </div>
 
-        // Close user menu when clicking outside
-        document.addEventListener('click', (event) => {
-            if (!event.target.closest('.user-menu')) {
-                userMenuContent.style.display = 'none';
-            }
-        });
+            <div class="form-group">
+                <label for="project-description">Description</label>
+                <textarea id="project-description" name="project-description" required></textarea>
+            </div>
 
-        // Animate project cards on scroll
-        const projectCards = document.querySelectorAll('.project-card');
+            <div class="form-group">
+                <label for="created-date">Start Date</label>
+                <input type="date" id="created-date" name="created-date" required>
+            </div>
 
-        const animateOnScroll = (entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        };
+            <div class="form-group">
+                <label for="due-date">Due Date</label>
+                <input type="date" id="due-date" name="due-date" required>
+            </div>
 
-        const options = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
+            <div class="form-group">
+                <label for="project-manager">Project Type</label>
+                <select id="project-manager" name="project-manager" required>
+                    <option value="">Select type</option>
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                </select>
+            </div>
 
-        const observer = new IntersectionObserver(animateOnScroll, options);
+            <div class="form-group">
+                <label for="assign-member">Assign Member</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="assign-member" name="assign-member" placeholder="Enter member name">
+                    <button type="button" id="add-member-btn" class="btn-secondary" style="padding: 0.75rem;">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
 
-        projectCards.forEach(card => {
-            card.style.opacity = 0;
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            observer.observe(card);
-        });
+            <div id="member-list-container">
+                <ul id="member-list" class="member-list"></ul>
+            </div>
+
+            <button type="submit" class="submit-btn">Save Project</button>
+        </div>
+    </form>
+
+
+    <script src="js/project.js">
+        
+
     </script>
+
+
 </body>
 
 </html>

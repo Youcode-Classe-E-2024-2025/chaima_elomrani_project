@@ -234,7 +234,7 @@
         <div class="container nav-container">
             <div class="logo">ProManage</div>
             <div class="nav-links">
-                <a href="index.php?page=home">Home</a>
+            <a href="index.php?page=admin_home">Home</a>
                 <a href="index.php?page=dashbord">Dashboard</a>
                 <a href="index.php?page=tasks_page">Tasks</a>
                 <a href="index.php?page=all_projects">All Projects</a>
@@ -335,7 +335,6 @@
             }
         });
 
-        // Animate dashboard cards on scroll
         const animateOnScroll = (entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
