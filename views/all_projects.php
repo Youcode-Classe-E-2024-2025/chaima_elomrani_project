@@ -12,7 +12,7 @@ require_once './models/projects_model.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProManage - All Projects</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="./styles/projects_form.css">
+    <link rel="stylesheet" href="./styles/projects.css">
     <style>
         :root {
             --bg-primary: #f5f5f5;
@@ -457,37 +457,39 @@ require_once './models/projects_model.php';
         </div>
     </main>
 
-
     <!-- ********* update form ******** -->
-    <form class="update-project-form" id="edit-form" method="POST" action="index.php?action=projects_controller">
+    <form class="update-project-form" id="edit-form" method="POST" action="index.php?action=update_project">
         <div class="form-header">
             <h1 class="create-project-title">Project Details</h1>
             <button type="button" class="close-btn" id="close-btn">&times;</button>
         </div>
         <div class="form-content">
+            <input type="hidden" id="edit-project-id" name="project_id">
+            
             <div class="form-group">
-                <label for="project-name">Project Name</label>
-                <input type="text" id="project-name" name="project-name" required>
+                <label for="edit-project-name">Project Name</label>
+                <input type="text" id="edit-project-name" name="project_name" required>
             </div>
 
             <div class="form-group">
-                <label for="project-description">Description</label>
-                <textarea id="project-description" name="project-description" required></textarea>
+                <label for="edit-project-description">Description</label>
+                <textarea id="edit-project-description" name="project_description" required></textarea>
+            </div>
+
+            <div class="form-group-inline">
+                <!-- <div class="form-group">
+                    <label for="edit-created-date">Created Date</label>
+                    <input type="date" id="edit-created-date" name="created_date" required>
+                </div> -->
+                <div class="form-group">
+                    <label for="edit-due-date">Due Date</label>
+                    <input type="date" id="edit-due-date" name="due_date" required>
+                </div>
             </div>
 
             <div class="form-group">
-                <label for="created-date">Start Date</label>
-                <input type="date" id="created-date" name="created-date" required>
-            </div>
-
-            <div class="form-group">
-                <label for="due-date">Due Date</label>
-                <input type="date" id="due-date" name="due-date" required>
-            </div>
-
-            <div class="form-group">
-                <label for="project-manager">Project Type</label>
-                <select id="project-manager" name="project-manager" required>
+                <label for="edit-project-type">Project Type</label>
+                <select id="edit-project-type" name="project_type" required>
                     <option value="">Select type</option>
                     <option value="public">Public</option>
                     <option value="private">Private</option>
@@ -497,7 +499,7 @@ require_once './models/projects_model.php';
             <div class="form-group">
                 <label for="assign-member">Assign Member</label>
                 <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="assign-member" name="assign-member" placeholder="Enter member name">
+                    <input type="text" id="assign-member" name="assign_member" placeholder="Enter member name">
                     <button type="button" id="add-member-btn" class="btn-secondary" style="padding: 0.75rem;">
                         <i class="fas fa-plus"></i>
                     </button>
@@ -512,9 +514,42 @@ require_once './models/projects_model.php';
         </div>
     </form>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const closeBtn = document.getElementById('close-btn');
+            const editForm = document.getElementById('edit-form');
+            const editButtons = document.querySelectorAll('.update-btn');
+
+            // Populate form with project data
+            editButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const projectCard = this.closest('.project-card');
+                    
+                    // Get project details from hidden inputs in the project card
+                    const projectId = projectCard.querySelector('input[name="project_id"]').value;
+                    const projectName = projectCard.querySelector('input[name="project_name"]').value;
+                    const projectDescription = projectCard.querySelector('input[name="project_description"]').value;
+                    const projectDueDate = projectCard.querySelector('input[name="project_due_date"]').value;
+
+                    // Populate the edit form
+                    document.getElementById('edit-project-id').value = projectId;
+                    document.getElementById('edit-project-name').value = projectName;
+                    document.getElementById('edit-project-description').value = projectDescription;
+                    document.getElementById('edit-due-date').value = projectDueDate;
+
+                    // Show the form
+                    editForm.style.display = 'block';
+                });
+            });
+
+            // Close form when close button is clicked
+            closeBtn.addEventListener('click', () => {
+                editForm.style.display = 'none';
+            });
+        });
+    </script>
 
     <script src="js/project.js"></script>
-
 
 </body>
 

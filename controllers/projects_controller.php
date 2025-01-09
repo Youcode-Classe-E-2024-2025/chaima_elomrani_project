@@ -46,10 +46,10 @@ class ProjectController
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $project_id = filter_input(INPUT_POST, 'project_id', FILTER_VALIDATE_INT);
-                $project_name = filter_input(INPUT_POST, 'project_name', FILTER_SANITIZE_STRING);
-                $project_description = filter_input(INPUT_POST, 'project_description', FILTER_SANITIZE_STRING);
-                $due_date = filter_input(INPUT_POST, 'project_due_date', FILTER_SANITIZE_STRING);
+                $project_id = filter_input(INPUT_POST, $_POST['project_id'], FILTER_VALIDATE_INT);
+                $project_name = filter_input(INPUT_POST, $_POST['project_name'-], FILTER_SANITIZE_STRING);
+                $project_description = filter_input(INPUT_POST, $_POST['project_description'], FILTER_SANITIZE_STRING);
+                $due_date = filter_input(INPUT_POST, $_POST['project_due_date'], FILTER_SANITIZE_STRING);
 
                 if ($project_id && $project_name) {
                     try {

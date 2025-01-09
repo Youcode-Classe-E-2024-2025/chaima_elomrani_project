@@ -56,7 +56,10 @@
                     <textarea id="project-description" name="project-description" required></textarea>
                 </div>
                 <div class="form-group-inline">
-                
+                    <!-- <div class="form-group">
+                        <label for="created-date">Created Date</label>
+                        <input type="date" id="created-date" name="created-date" required>
+                    </div> -->
                     <div class="form-group">
                         <label for="due-date">due Date</label>
                         <input type="date" id="due-date" name="due-date" required>

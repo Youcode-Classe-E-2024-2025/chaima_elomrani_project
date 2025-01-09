@@ -1,101 +1,98 @@
 <?php
-require_once("./config/connexion.php");
+require_once './config/connexion.php';
 
 class Project
 {
-    private $conn;
+    public $conn;
     private $table = 'projects';
 
     public $name;
     public $description;
-    public $created_date;
     public $due_date;
     public $type;
 
-
-    public function __construct($db)
-    {
+    public function __construct($db){
         $this->conn = $db;
     }
 
-    public function displayProjects()
-    {
-        $sql = "SELECT * FROM projects"; 
-        $result = $this->conn->query($sql);
+    public function displayProjects() {
+        $query = "SELECT * FROM " . $this->table;
+        $result = $this->conn->query($query);
 
-        if ($result) {
-            return $result->fetch_all(MYSQLI_ASSOC);
-        } else {
+        if (!$result) {
+            error_log("Query failed: " . $this->conn->error);
             return [];
         }
-    }
 
+        $projects = [];
+        while ($row = $result->fetch_assoc()) {
+            $projects[] = $row;
+        }
+
+        return $projects;
+    }
 
     public function addProject()
     {
-        $query = "INSERT INTO " . $this->table . " (name, description, created_date, due_date, type) VALUES (:project_name, :project_description, :created_date, :due_date, :project_type)";
+        $query = "INSERT INTO " . $this->table . " (name, description, due_date, type) VALUES (?, ?, ?, ?)";
 
         $stmt = $this->conn->prepare($query);
 
-        $stmt->bindParam(":project_name", $this->name);
-        $stmt->bindParam(":project_description", $this->description);
-        $stmt->bindParam(":created_date", $this->created_date);
-        $stmt->bindParam(":due_date", $this->due_date);
-        $stmt->bindParam(":project_type", $this->type);
+        if (!$stmt) {
+            error_log('Prepare failed: ' . $this->conn->error);
+            return false;
+        }
+
+        $stmt->bind_param("ssss", $this->name, $this->description, $this->due_date, $this->type);
 
         if ($stmt->execute()) {
             return true;
         }
+        error_log('Execute failed: ' . $stmt->error);
         return false;
-
     }
 
+    public function updateProject($id, $name, $description, $due_date){
+        $query = "UPDATE projects SET name = ?, description = ?, due_date = ? WHERE id = ?";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        if (!$stmt) {
+            error_log('Prepare failed: ' . $this->conn->error);
+            return false;
+        }
 
+        $stmt->bind_param("sssi", $name, $description, $due_date, $id);
+
+        $result = $stmt->execute();
+
+        if (!$result) {
+            error_log('Execute failed: ' . $stmt->error);
+            $stmt->close();
+            return false;
+        }
+
+        $stmt->close();
+        return true;
+    }
 
     public function deleteProject($project_id)
     {
-        $query = "DELETE FROM projects  WHERE id = :project_id";
+        $query = "DELETE FROM projects  WHERE id = ?";
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":project_id", $project_id, PDO::PARAM_INT);
+        $stmt->bind_param("i", $project_id);
 
         if ($stmt->execute()) {
             return true;
         }
+        error_log('Execute failed: ' . $stmt->error);
         return false;
     }
-
-
-
-    public function updateProject($id,$name, $description,$type,$due_date){
-       $query="UPDATE projects SET id =?, name =?, description =?, due_date=?";
-       $stmt = $this->conn->prepare($query);
-
-       $stmt->bindParam("siis",$id,$name,$description,$due_date);
-
-       try{
-        return $stmt->execute();
-       }catch(PDOException $e){
-        error_log('error',$e->getMessage());
-        return false;
-       }
-    }
-
 }
-
-
-
-
-
-
-
-
 
 $dbConnection = new mysqli('localhost', 'root', '', 'project_management');
 $sendProject = new Project($dbConnection);
 
-
 $viewProjects = new Project($dbConnection);
 $projects = $viewProjects->displayProjects();
-
-

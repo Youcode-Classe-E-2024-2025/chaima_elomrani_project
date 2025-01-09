@@ -91,15 +91,15 @@ memberList.addEventListener('click', (e) => {
     }
 });
 
-projectForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const formData = new FormData(projectForm);
-    const projectData = Object.fromEntries(formData.entries());
-    projectData.members = members;
+// projectForm.addEventListener('submit', (e) => {
+//     e.preventDefault();
+//     const formData = new FormData(projectForm);
+//     const projectData = Object.fromEntries(formData.entries());
+//     projectData.members = members;
 
-    console.log('Project Data:', projectData);
-    alert('Project saved successfully!');
-});
+//     console.log('Project Data:', projectData);
+//     alert('Project saved successfully!');
+// });
 
 
 

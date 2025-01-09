@@ -8,22 +8,19 @@ class Connexion
     private $password = "";
     private $conn;
 
-    public function getconnexion(): PDO {
-        $this->conn = null;
+    public function getconnexion() {
+        // Create mysqli connection
+        $this->conn = new mysqli($this->host, $this->username, $this->password, $this->db);
 
-        try {
-            // Fix the PDO connection string
-            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db, $this->username, $this->password);
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            // Remove debug echo
-            // echo "safe rah tconnecta";
-        } catch (PDOException $e) {
-            // Throw exception instead of echoing
-            throw new Exception("Database connection failed: " . $e->getMessage());
+        // Check connection
+        if ($this->conn->connect_error) {
+            throw new Exception("Database connection failed: " . $this->conn->connect_error);
         }
 
         return $this->conn;
     }
 }
+
+// Create a global database connection
+$database = (new Connexion())->getconnexion();
 ?>
