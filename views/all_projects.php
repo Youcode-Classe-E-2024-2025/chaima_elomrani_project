@@ -354,6 +354,146 @@ require_once './models/projects_model.php';
             text-decoration: none;
             cursor: pointer;
         }
+
+        .project-actions {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .view-tasks-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--accent-primary);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-tasks-btn:hover {
+            background-color: #2a6f70;
+        }
+
+        .view-tasks-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .projects-header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .projects-header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: var(--bg-secondary);
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: var(--shadow);
+        }
+
+        .close-modal {
+            color: var(--text-secondary);
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: var(--accent-primary);
+        }
+
+        #projectsSelect,
+        #memberSelect {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background-color: var(--accent-secondary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background-color: color-mix(in srgb, var(--accent-secondary) 90%, white);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-primary);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            background-color: color-mix(in srgb, var(--accent-primary) 90%, white);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn i {
+            font-size: 1rem;
+        }
+
+        /* Modal Submit Button */
+        #assignProjectForm .btn-primary {
+            width: 100%;
+            margin-top: 1rem;
+        }
     </style>
 
 </head>
@@ -386,14 +526,58 @@ require_once './models/projects_model.php';
     <main>
         <div class="projects-header">
             <div class="container">
-                <h1 class="projects-title">All Projects</h1>
-                <p class="projects-subtitle">View and manage all your ongoing and completed projects.</p>
+                <div class="projects-header-content">
+                    <div class="projects-header-text">
+                        <h1 class="projects-title">All Projects</h1>
+                        <p class="projects-subtitle">View and manage all your ongoing and completed projects.</p>
+                    </div>
+                    <div class="projects-header-actions">
+                        <button id="assignProjectsBtn" class="btn btn-secondary">
+                            <i class="fas fa-users"></i> Assign Projects & Members
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assign Projects and Members Modal -->
+        <div id="assignProjectsModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Assign Projects and Members</h2>
+                <form id="assignProjectForm">
+                    <div class="form-group">
+                        <label for="projectsSelect">Select Projects</label>
+                        <select id="projectsSelect">
+                            <?php foreach ($projects as $project): ?>
+                                <option value="<?php echo $project['id']; ?>">
+                                    <?php echo htmlspecialchars($project['name']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="assign-member">Assign Member</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="text" id="assign-member" name="assign_member" placeholder="Enter member name">
+                            <button type="button" id="add-member-btn" class="btn-secondary" style="padding: 0.75rem;">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="member-list-container">
+                        <ul id="member-list" class="member-list"></ul>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Assign</button>
+                </form>
             </div>
         </div>
 
         <div class="container">
             <?php
-            // Display success or error messages
             if (isset($_SESSION['message'])): ?>
                 <div class="message success-message">
                     <?php
@@ -451,6 +635,12 @@ require_once './models/projects_model.php';
                             <p><b>Assigned people: <span>chaima elomrani , malak elomrani</span></b></p>
 
                         </div>
+                        <div class="project-actions">
+                            <a href="index.php?page=tasks_page&id_project=<?php echo $project['id']; ?>"
+                                class="view-tasks-btn">
+                                <i class="fas fa-tasks"></i> View Tasks
+                            </a>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -465,7 +655,7 @@ require_once './models/projects_model.php';
         </div>
         <div class="form-content">
             <input type="hidden" id="edit-project-id" name="project_id">
-            
+
             <div class="form-group">
                 <label for="edit-project-name">Project Name</label>
                 <input type="text" id="edit-project-name" name="project_name" required>
@@ -477,10 +667,6 @@ require_once './models/projects_model.php';
             </div>
 
             <div class="form-group-inline">
-                <!-- <div class="form-group">
-                    <label for="edit-created-date">Created Date</label>
-                    <input type="date" id="edit-created-date" name="created_date" required>
-                </div> -->
                 <div class="form-group">
                     <label for="edit-due-date">Due Date</label>
                     <input type="date" id="edit-due-date" name="due_date" required>
@@ -496,35 +682,21 @@ require_once './models/projects_model.php';
                 </select>
             </div>
 
-            <div class="form-group">
-                <label for="assign-member">Assign Member</label>
-                <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="assign-member" name="assign_member" placeholder="Enter member name">
-                    <button type="button" id="add-member-btn" class="btn-secondary" style="padding: 0.75rem;">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div id="member-list-container">
-                <ul id="member-list" class="member-list"></ul>
-            </div>
-
             <button type="submit" class="submit-btn">Save Project</button>
         </div>
     </form>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const closeBtn = document.getElementById('close-btn');
             const editForm = document.getElementById('edit-form');
             const editButtons = document.querySelectorAll('.update-btn');
 
             // Populate form with project data
             editButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const projectCard = this.closest('.project-card');
-                    
+
                     // Get project details from hidden inputs in the project card
                     const projectId = projectCard.querySelector('input[name="project_id"]').value;
                     const projectName = projectCard.querySelector('input[name="project_name"]').value;
@@ -545,6 +717,52 @@ require_once './models/projects_model.php';
             // Close form when close button is clicked
             closeBtn.addEventListener('click', () => {
                 editForm.style.display = 'none';
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const assignProjectsBtn = document.getElementById('assignProjectsBtn');
+            const assignProjectsModal = document.getElementById('assignProjectsModal');
+            const closeModal = document.querySelector('.close-modal');
+            const assignProjectForm = document.getElementById('assignProjectForm');
+
+            // Open modal
+            assignProjectsBtn.addEventListener('click', function () {
+                assignProjectsModal.style.display = 'block';
+            });
+
+            // Close modal
+            closeModal.addEventListener('click', function () {
+                assignProjectsModal.style.display = 'none';
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function (event) {
+                if (event.target === assignProjectsModal) {
+                    assignProjectsModal.style.display = 'none';
+                }
+            });
+
+            // Handle form submission
+            assignProjectForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const selectedProjects = Array.from(
+                    document.getElementById('projectsSelect').selectedOptions
+                ).map(option => option.value);
+
+                const selectedMembers = Array.from(
+                    document.getElementById('memberSelect').selectedOptions
+                ).map(option => option.value);
+
+                // You can add AJAX call here to send data to server
+                console.log('Selected Projects:', selectedProjects);
+                console.log('Selected Members:', selectedMembers);
+
+                // Close modal after submission
+                assignProjectsModal.style.display = 'none';
             });
         });
     </script>

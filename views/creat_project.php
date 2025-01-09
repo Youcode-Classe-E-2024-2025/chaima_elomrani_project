@@ -73,15 +73,7 @@
                         <option value="private">private</option>
                     </select>
                 </div>
-                <div class="form-group">
-                <label for="assignMember">Assign Member</label>
-                <div style="display: flex; gap: 0.5rem;">
-                    <input type="text" id="assignMember" name="assignMember" placeholder="Enter member name">
-                    <button type="button" id="addMemberBtn" class="btn btn-secondary">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-            </div>
+        
 
             <div id="memberListContainer">
                 <ul id="memberList" class="member-list"></ul>
