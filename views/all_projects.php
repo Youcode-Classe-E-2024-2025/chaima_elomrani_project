@@ -545,12 +545,12 @@ require_once './models/projects_model.php';
             <div class="modal-content">
                 <span class="close-modal">&times;</span>
                 <h2>Assign Projects and Members</h2>
-                <form id="assignProjectForm">
+                <form id="assignProjectForm" method="POST" >
                     <div class="form-group">
                         <label for="projectsSelect">Select Projects</label>
-                        <select id="projectsSelect">
+                        <select id="projectsSelect" >
                             <?php foreach ($projects as $project): ?>
-                                <option value="<?php echo $project['id']; ?>">
+                                <option  value="<?php echo $project['id']; ?>">
                                     <?php echo htmlspecialchars($project['name']); ?>
                                 </option>
                             <?php endforeach; ?>
@@ -560,7 +560,7 @@ require_once './models/projects_model.php';
                     <div class="form-group">
                         <label for="assign-member">Assign Member</label>
                         <div style="display: flex; gap: 0.5rem;">
-                            <input type="text" id="assign-member" name="assign_member" placeholder="Enter member name">
+                            <input type="text" id="assign-member" name="assign_member" placeholder="Enter member email">
                             <button type="button" id="add-member-btn" class="btn-secondary" style="padding: 0.75rem;">
                                 <i class="fas fa-plus"></i>
                             </button>
