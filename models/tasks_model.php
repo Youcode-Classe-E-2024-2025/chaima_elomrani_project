@@ -35,43 +35,25 @@ class Task
         }
     }
 
-    public function addTask($projectId = null)
+    public function addTask()
     {
-        $query = "INSERT INTO tasks (name, description, start_date, due_date, status, category, tag, project_id) 
-                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO tasks (name, description,start_date, due_date , status, category , tag)
+                VALUES(:name, :description, :start_date, :end_date, :status, :category_id, :tag_id)";
 
         $stmt = $this->conn->prepare($query);
 
-        if (!$stmt) {
-            error_log("Prepare failed: " . $this->conn->error);
-            return false;
-        }
+        $stmt->bindParam(":name", $this->name);
+        $stmt->bindParam(":description", $this->description);
+        $stmt->bindParam(":start_date", $this->start_date);
+        $stmt->bindParam(":end_date", $this->end_date);
+        $stmt->bindParam(":status", $this->status);
+        $stmt->bindParam(":category_id", $this->category);
+        $stmt->bindParam(":tag_id", $this->tag);
 
-        $stmt->bind_param(
-            'sssssiis', 
-            $this->name, 
-            $this->description, 
-            $this->start_date, 
-            $this->end_date, 
-            $this->status, 
-            $this->category, 
-            $this->tag,
-            $projectId
-        );
-
-        try {
-            $result = $stmt->execute();
-            
-            if (!$result) {
-                error_log("Execute failed: " . $stmt->error);
-                return false;
-            }
-            
+        if ($stmt->execute()) {
             return true;
-        } catch (Exception $e) {
-            error_log("Task creation error: " . $e->getMessage());
-            return false;
         }
+        return false;
     }
 
     public function updateTask($id, $name, $description, $start_date, $due_date, $status, $category, $tag) {
