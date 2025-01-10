@@ -1,5 +1,5 @@
 <?php
-include("./controllers/signup_controller.php");
+require_once ("./controllers/signup_controller.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">

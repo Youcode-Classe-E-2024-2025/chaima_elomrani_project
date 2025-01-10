@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 
 require_once ("./config/connexion.php");
 require_once ("./models/user.php");

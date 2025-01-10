@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 require_once './config/connexion.php';
 require_once './models/projects_model.php';
 
@@ -25,7 +25,7 @@ class ProjectController
         $this->project->name = $data['project-name'];
         $this->project->description = $data['project-description'];
         $this->project->type = $data['project-manager'];
-        $this->project->created_date = $data['created-date'];
+        // $this->project->created_date = $data['created-date'];
         $this->project->due_date = $data['due-date'];
         $this->project->chef_id = 1;
 
@@ -47,7 +47,7 @@ class ProjectController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $project_id = filter_input(INPUT_POST, $_POST['project_id'], FILTER_VALIDATE_INT);
-                $project_name = filter_input(INPUT_POST, $_POST['project_name'-], FILTER_SANITIZE_STRING);
+                $project_name = filter_input(INPUT_POST, $_POST['project_name'], FILTER_SANITIZE_STRING);
                 $project_description = filter_input(INPUT_POST, $_POST['project_description'], FILTER_SANITIZE_STRING);
                 $due_date = filter_input(INPUT_POST, $_POST['project_due_date'], FILTER_SANITIZE_STRING);
 

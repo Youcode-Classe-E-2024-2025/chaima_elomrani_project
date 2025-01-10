@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 require_once './config/connexion.php';
 require_once './models/projects_model.php';
 
@@ -358,6 +358,8 @@ require_once './models/projects_model.php';
         .project-actions {
             margin-top: 1rem;
             display: flex;
+            gap: 20px;
+            height:40px;
             justify-content: flex-start;
         }
 
@@ -371,6 +373,7 @@ require_once './models/projects_model.php';
             padding: 0.5rem 1rem;
             border-radius: 5px;
             transition: background-color 0.3s ease;
+            padding: 10px
         }
 
         .view-tasks-btn:hover {
@@ -404,6 +407,19 @@ require_once './models/projects_model.php';
             background-color: rgba(0, 0, 0, 0.4);
         }
 
+        .assign_task_modal{
+            display: none; /* Initially hidden */
+            position: fixed;
+            z-index: 1100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+
+        }
+
         .modal-content {
             background-color: var(--bg-secondary);
             margin: 10% auto;
@@ -412,6 +428,7 @@ require_once './models/projects_model.php';
             width: 500px;
             max-width: 90%;
             box-shadow: var(--shadow);
+            
         }
 
         .close-modal {
@@ -494,6 +511,27 @@ require_once './models/projects_model.php';
             width: 100%;
             margin-top: 1rem;
         }
+
+        .project-details-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--accent-secondary);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .project-details-btn:hover {
+            background-color: #e67e22;
+        }
+
+        .project-details-btn i {
+            margin-right: 0.5rem;
+        }
+
     </style>
 
 </head>
@@ -641,12 +679,48 @@ require_once './models/projects_model.php';
                                 class="view-tasks-btn">
                                 <i class="fas fa-tasks"></i> View Tasks
                             </a>
+                            <a href=""
+                                class="project-details-btn">
+                                <!-- <button class="project-details-btn"> -->
+                                <i class="fas fa-plus"></i> 
+                                Add members
+                                <!-- </button> -->
+                            </a>
                         </div>
                     </div>
                 <?php endforeach; ?>
             </div>
         </div>
     </main>
+      <!-- ***************************assign task form ***************** -->
+    <div id="form_to_assign">
+      <div id="assignTasksModal" class="assign_task_modal">
+      <div class="modal-content" id="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Assign Projects and Members</h2>
+                <form id="assignTaskForm" method="POST">
+                    <div class="form-group">
+                        <label for="assign-member">Assign Member</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="email" id="assign-member" name="assign_member"
+                                placeholder="Enter member email">
+                            <button type="button" id="add-member-btn" class="btn-secondary" style="padding: 0.75rem;">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="member-list-container">
+                        <ul id="member-list" class="member-list"></ul>
+                    </div>
+
+                    <input type="submit" class="btn btn-primary" value="Assign">
+                </form>
+            </div>
+       </div>
+       </div>
+
+
 
     <!-- ********* update form ******** -->
     <form class="update-project-form" id="edit-form" method="POST" action="index.php?action=update_project">
@@ -687,188 +761,10 @@ require_once './models/projects_model.php';
         </div>
     </form>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const closeBtn = document.getElementById('close-btn');
-            const editForm = document.getElementById('edit-form');
-            const editButtons = document.querySelectorAll('.update-btn');
 
-            // Populate form with project data
-            editButtons.forEach(button => {
-                button.addEventListener('click', function () {
-                    const projectCard = this.closest('.project-card');
-
-                    // Get project details from hidden inputs in the project card
-                    const projectId = projectCard.querySelector('input[name="project_id"]').value;
-                    const projectName = projectCard.querySelector('input[name="project_name"]').value;
-                    const projectDescription = projectCard.querySelector('input[name="project_description"]').value;
-                    const projectDueDate = projectCard.querySelector('input[name="project_due_date"]').value;
-
-                    // Populate the edit form
-                    document.getElementById('edit-project-id').value = projectId;
-                    document.getElementById('edit-project-name').value = projectName;
-                    document.getElementById('edit-project-description').value = projectDescription;
-                    document.getElementById('edit-due-date').value = projectDueDate;
-
-                    // Show the form
-                    editForm.style.display = 'block';
-                });
-            });
-
-            // Close form when close button is clicked
-            closeBtn.addEventListener('click', () => {
-                editForm.style.display = 'none';
-            });
-        });
-    </script>
-
-    <!-- <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const assignProjectsBtn = document.getElementById('assignProjectsBtn');
-            const assignProjectsModal = document.getElementById('assignProjectsModal');
-            const closeModal = document.querySelector('.close-modal');
-            const assignProjectForm = document.getElementById('assignProjectForm');
-
-            // Open modal
-            assignProjectsBtn.addEventListener('click', function () {
-                assignProjectsModal.style.display = 'block';
-            });
-
-            // Close modal
-            closeModal.addEventListener('click', function () {
-                assignProjectsModal.style.display = 'none';
-            });
-
-            // Close modal when clicking outside
-            window.addEventListener('click', function (event) {
-                if (event.target === assignProjectsModal) {
-                    assignProjectsModal.style.display = 'none';
-                }
-            });
-
-            // Handle form submission
-            assignProjectForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                const selectedProjects = Array.from(
-                    document.getElementById('projectsSelect').selectedOptions
-                ).map(option => option.value);
-
-                const selectedMembers = Array.from(
-                    document.getElementById('memberSelect').selectedOptions
-                ).map(option => option.value);
-
-                // You can add AJAX call here to send data to server
-                console.log('Selected Projects:', selectedProjects);
-                console.log('Selected Members:', selectedMembers);
-
-                // Close modal after submission
-                assignProjectsModal.style.display = 'none';
-            });
-        });
-    </script> -->
-
-    <script>
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const assignProjectsBtn = document.getElementById('assignProjectsBtn');
-            const assignProjectsModal = document.getElementById('assignProjectsModal');
-            const closeModal = document.querySelector('.close-modal');
-
-            // Open modal
-            assignProjectsBtn.addEventListener('click', function () {
-                assignProjectsModal.style.display = 'block';
-            });
-
-            // Close modal
-            closeModal.addEventListener('click', function () {
-                assignProjectsModal.style.display = 'none';
-            });
-
-            // Close modal when clicking outside
-            window.addEventListener('click', function (event) {
-                if (event.target === assignProjectsModal) {
-                    assignProjectsModal.style.display = 'none';
-                }
-            });
-
-            const addMemberBtn = document.getElementById('add-member-btn');
-            const memberInput = document.getElementById('assign-member');
-            const memberList = document.getElementById('member-list');
-
-            // Add member to list
-            addMemberBtn.addEventListener('click', function () {
-                const memberEmail = memberInput.value.trim();
-                if (memberEmail) {
-                    const li = document.createElement('li');
-                    li.textContent = memberEmail;
-                    memberList.appendChild(li);
-                    memberInput.value = '';
-                }
-            });
-
-            // Handle form submission
-            const assignProjectForm = document.getElementById('assignProjectForm');
-            assignProjectForm.addEventListener('submit', async function (e) {
-                e.preventDefault();
-
-                try {
-                    const projectId = document.getElementById('projectsSelect').value;
-                    const memberElements = document.querySelectorAll('#member-list li');
-                    const members = Array.from(memberElements).map(li => li.textContent.trim());
-
-                    if (!projectId) {
-                        alert('Please select a project');
-                        return;
-                    }
-
-                    if (members.length === 0) {
-                        alert('Please add at least one member');
-                        return;
-                    }
-
-                    console.log('Sending data:', { projectId, members }); // Debug log
-
-                    const response = await fetch('index.php?action=assign_members', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            projectId: projectId,
-                            members: members
-                        })
-                    });
-
-                    // Check if response is OK
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error('Server error:', errorText);
-                        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
-                    }
-
-                    // Try to parse JSON
-                    const data = await response.json();
-
-                    if (data.success) {
-                        alert('Members assigned successfully!');
-                        assignProjectsModal.style.display = 'none';
-                        memberList.innerHTML = '';
-                        window.location.reload();
-                    } else {
-                        // Handle unsuccessful response
-                        throw new Error(data.message || 'Unknown error occurred');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('Error assigning members: ' + error.message);
-                }
-            });
-        });
-    </script>
-
+     <script src="./js/assignement.js" ></script>
     <script src="./js/project.js"></script>
-
+      
 </body>
 
 </html>

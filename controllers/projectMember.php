@@ -99,7 +99,6 @@ class TeamMember {
             $this->pdo->commit();
             error_log("Transaction committed successfully");
             
-            // If all members failed, throw an exception
             if (empty($results['success']) && !empty($results['errors'])) {
                 throw new Exception("Failed to add any members");
             }

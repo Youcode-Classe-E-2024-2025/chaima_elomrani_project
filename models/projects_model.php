@@ -1,7 +1,8 @@
 <?php
 require_once './config/connexion.php';
 require_once './controllers/projectMember.php';
-require_once './controllers/projectMember.php';
+require_once './controllers/projects_controller.php';
+// require_once './controllers/projectMember.php';
 
 class Project
 {
@@ -90,6 +91,60 @@ class Project
         }
         error_log('Execute failed: ' . $stmt->error);
         return false;
+    }
+
+    public function getProjectDetails($projectId) {
+        try {
+            $stmt = $this->conn->prepare("
+                SELECT id, name, description, status, 
+                       DATE_FORMAT(start_date, '%Y-%m-%d') as start_date, 
+                       DATE_FORMAT(end_date, '%Y-%m-%d') as end_date 
+                FROM projects 
+                WHERE id = ?"
+            );
+            $stmt->bind_param("i", $projectId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->fetch_assoc();
+        } catch (Exception $e) {
+            error_log("Error fetching project details: " . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function getProjectTeamMembers($projectId) {
+        try {
+            $stmt = $this->conn->prepare("
+                SELECT DISTINCT u.id, u.name, u.email 
+                FROM users u
+                JOIN team_members tm ON u.id = tm.user_id
+                WHERE tm.project_id = ?"
+            );
+            $stmt->bind_param("i", $projectId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } catch (Exception $e) {
+            error_log("Error fetching project team members: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getProjectTasks($projectId) {
+        try {
+            $stmt = $this->conn->prepare("
+                SELECT id, title, status 
+                FROM tasks 
+                WHERE project_id = ?"
+            );
+            $stmt->bind_param("i", $projectId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            return $result->fetch_all(MYSQLI_ASSOC);
+        } catch (Exception $e) {
+            error_log("Error fetching project tasks: " . $e->getMessage());
+            return [];
+        }
     }
 }
 

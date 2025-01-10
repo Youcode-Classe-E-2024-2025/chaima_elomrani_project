@@ -1,7 +1,8 @@
 <?php
+$project=$_GET['id_project'];
 require_once('./models/tasks_model.php');
 require_once('./controllers/delete_task.php');
-$project=$_GET['id_project'];
+
 ?>
 
 <!DOCTYPE html>
