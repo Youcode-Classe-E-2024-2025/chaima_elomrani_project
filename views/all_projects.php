@@ -408,7 +408,7 @@ require_once './models/projects_model.php';
         }
 
         .assign_task_modal{
-            display: none; /* Initially hidden */
+            display: none;
             position: fixed;
             z-index: 1100;
             left: 0;
@@ -675,18 +675,18 @@ require_once './models/projects_model.php';
 
                         </div>
                         <div class="project-actions">
-                            <a href="index.php?page=tasks_page&id_project=<?php echo $project['id']; ?>"
+                            <a href="index.php?page=tasks_page&id_project=<?php echo $project['id']; ?>" 
                                 class="view-tasks-btn">
                                 <i class="fas fa-tasks"></i> View Tasks
                             </a>
-                            <a href=""
-                                class="project-details-btn">
-                                <!-- <button class="project-details-btn"> -->
+                            <a href="#" 
+                                class="project-details-btn" 
+                                data-project-id="<?php echo $project['id']; ?>">
                                 <i class="fas fa-plus"></i> 
                                 Add members
-                                <!-- </button> -->
                             </a>
                         </div>
+                        <input type="hidden" name="project_id" value="<?php echo $project['id']; ?>">
                     </div>
                 <?php endforeach; ?>
             </div>

@@ -133,6 +133,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const assignTaskForm = document.getElementById('assignTaskForm');
     const projectDetailsBtns = document.querySelectorAll('.project-details-btn');
 
+
+    // assignTasksModal.style.display='none';
     // Open modal for each project's "Add Members" button
     projectDetailsBtns.forEach(btn => {
         btn.addEventListener('click', function(e) {

@@ -4,7 +4,6 @@ require_once('./models/tasks_model.php');
 require_once('./controllers/delete_task.php');
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -145,7 +144,6 @@ require_once('./controllers/delete_task.php');
                         foreach ($tasks as $task):
                             if ($task['status'] === 'Done'):
                                 ?>
-
                                 <div class="task-card" draggable="true">
                                     <div class="icons">
                                         <form method="POST" action="index.php?action=delete_task"
@@ -187,6 +185,7 @@ require_once('./controllers/delete_task.php');
             <h2>Add New Task</h2>
             <form id="taskForm" action="index.php?action=task_controller" method="POST">
                 <input type="hidden" name="action" value="add_task">
+                <input type="hidden" name="project_id" value="<?php echo $project; ?>">
                 <div class="form-group">
                     <label for="task_name">Title</label>
                     <input type="text" id="title" name="task_name" required>
@@ -206,14 +205,14 @@ require_once('./controllers/delete_task.php');
                 <div class="form-group">
                     <label for="status">Status</label>
                     <select id="status" name="status">
-                        <option value="1">To Do</option>
-                        <option value="2">In Progress</option>
-                        <option value="3">Done</option>
+                        <option value="ToDo">To Do</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Done">Done</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="type">Tag</label>
-                    <select id="type" name="type" multiple>
+                    <select id="type" name="tag" multiple>
 
                         <?php
                         foreach ($tags as $tag) {
@@ -224,12 +223,11 @@ require_once('./controllers/delete_task.php');
                             <?php
                         }
                         ?>
-
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="type">Category</label>
-                    <select id="type" name="type">
+                    <label for="category">Category</label>
+                    <select id="category" name="category">
                         <option value="">Select Category</option>
                         <?php
                         foreach ($categories as $category) {
@@ -240,12 +238,11 @@ require_once('./controllers/delete_task.php');
                             <?php
                         }
                         ?>
-
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="dueDate">Due Date</label>
-                    <input type="date" id="dueDate" name="dueDate">
+                    <input type="date" id="dueDate" name="dueDate" required>
                 </div>
                 <button type="submit" class="btn">Add Task</button>
             </form>
@@ -284,7 +281,7 @@ require_once('./controllers/delete_task.php');
             
             <div class="form-group">
                     <label for="type">Tag</label>
-                    <select id="type" name="type" multiple>
+                    <select id="type" name="tag" multiple>
 
                         <?php
                         foreach ($tags as $tag) {
@@ -295,12 +292,11 @@ require_once('./controllers/delete_task.php');
                             <?php
                         }
                         ?>
-
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="type">Category</label>
-                    <select id="type" name="type">
+                    <label for="category">Category</label>
+                    <select id="category" name="category">
                         <option value="">Select Category</option>
                         <?php
                         foreach ($categories as $category) {
@@ -311,7 +307,6 @@ require_once('./controllers/delete_task.php');
                             <?php
                         }
                         ?>
-
                     </select>
                 </div>
             
@@ -341,8 +336,5 @@ require_once('./controllers/delete_task.php');
 
 <script src="./js/tasks.js" ></script>
 
-
 </body>
 </html>
-
-   

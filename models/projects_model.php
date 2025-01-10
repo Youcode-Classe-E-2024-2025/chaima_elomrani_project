@@ -20,77 +20,86 @@ class Project
 
     public function displayProjects() {
         $query = "SELECT * FROM " . $this->table;
-        $result = $this->conn->query($query);
+        try {
+            $stmt = $this->conn->query($query);
 
-        if (!$result) {
-            error_log("Query failed: " . $this->conn->error);
+            if (!$stmt) {
+                error_log("Query failed: " . implode(', ', $this->conn->errorInfo()));
+                return [];
+            }
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log('PDO Exception: ' . $e->getMessage());
             return [];
         }
-
-        $projects = [];
-        while ($row = $result->fetch_assoc()) {
-            $projects[] = $row;
-        }
-
-        return $projects;
     }
 
     public function addProject()
     {
-        $query = "INSERT INTO " . $this->table . " (name, description, due_date, type) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO " . $this->table . " (name, description, due_date, type) VALUES (:name, :description, :due_date, :type)";
 
-        $stmt = $this->conn->prepare($query);
+        try {
+            $stmt = $this->conn->prepare($query);
 
-        if (!$stmt) {
-            error_log('Prepare failed: ' . $this->conn->error);
+            $stmt->bindParam(':name', $this->name, PDO::PARAM_STR);
+            $stmt->bindParam(':description', $this->description, PDO::PARAM_STR);
+            $stmt->bindParam(':due_date', $this->due_date, PDO::PARAM_STR);
+            $stmt->bindParam(':type', $this->type, PDO::PARAM_STR);
+
+            if ($stmt->execute()) {
+                return true;
+            }
+            error_log('Execute failed: ' . implode(', ', $stmt->errorInfo()));
+            return false;
+        } catch (PDOException $e) {
+            error_log('PDO Exception: ' . $e->getMessage());
             return false;
         }
-
-        $stmt->bind_param("ssss", $this->name, $this->description, $this->due_date, $this->type);
-
-        if ($stmt->execute()) {
-            return true;
-        }
-        error_log('Execute failed: ' . $stmt->error);
-        return false;
     }
 
     public function updateProject($id, $name, $description, $due_date){
-        $query = "UPDATE projects SET name = ?, description = ?, due_date = ? WHERE id = ?";
+        $query = "UPDATE projects SET name = :name, description = :description, due_date = :due_date WHERE id = :id";
         
-        $stmt = $this->conn->prepare($query);
-        
-        if (!$stmt) {
-            error_log('Prepare failed: ' . $this->conn->error);
+        try {
+            $stmt = $this->conn->prepare($query);
+            
+            $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+            $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+            $stmt->bindParam(':due_date', $due_date, PDO::PARAM_STR);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+            $result = $stmt->execute();
+
+            if (!$result) {
+                error_log('Execute failed: ' . implode(', ', $stmt->errorInfo()));
+                return false;
+            }
+
+            return true;
+        } catch (PDOException $e) {
+            error_log('PDO Exception: ' . $e->getMessage());
             return false;
         }
-
-        $stmt->bind_param("sssi", $name, $description, $due_date, $id);
-
-        $result = $stmt->execute();
-
-        if (!$result) {
-            error_log('Execute failed: ' . $stmt->error);
-            $stmt->close();
-            return false;
-        }
-
-        $stmt->close();
-        return true;
     }
 
     public function deleteProject($project_id)
     {
-        $query = "DELETE FROM projects  WHERE id = ?";
+        $query = "DELETE FROM projects WHERE id = :id";
 
-        $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("i", $project_id);
+        try {
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':id', $project_id, PDO::PARAM_INT);
 
-        if ($stmt->execute()) {
-            return true;
+            if ($stmt->execute()) {
+                return true;
+            }
+            error_log('Execute failed: ' . implode(', ', $stmt->errorInfo()));
+            return false;
+        } catch (PDOException $e) {
+            error_log('PDO Exception: ' . $e->getMessage());
+            return false;
         }
-        error_log('Execute failed: ' . $stmt->error);
-        return false;
     }
 
     public function getProjectDetails($projectId) {
@@ -100,13 +109,13 @@ class Project
                        DATE_FORMAT(start_date, '%Y-%m-%d') as start_date, 
                        DATE_FORMAT(end_date, '%Y-%m-%d') as end_date 
                 FROM projects 
-                WHERE id = ?"
+                WHERE id = :id"
             );
-            $stmt->bind_param("i", $projectId);
+            $stmt->bindParam(':id', $projectId, PDO::PARAM_INT);
             $stmt->execute();
-            $result = $stmt->get_result();
-            return $result->fetch_assoc();
-        } catch (Exception $e) {
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (PDOException $e) {
             error_log("Error fetching project details: " . $e->getMessage());
             return null;
         }
@@ -118,13 +127,13 @@ class Project
                 SELECT DISTINCT u.id, u.name, u.email 
                 FROM users u
                 JOIN team_members tm ON u.id = tm.user_id
-                WHERE tm.project_id = ?"
+                WHERE tm.project_id = :id"
             );
-            $stmt->bind_param("i", $projectId);
+            $stmt->bindParam(':id', $projectId, PDO::PARAM_INT);
             $stmt->execute();
-            $result = $stmt->get_result();
-            return $result->fetch_all(MYSQLI_ASSOC);
-        } catch (Exception $e) {
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (PDOException $e) {
             error_log("Error fetching project team members: " . $e->getMessage());
             return [];
         }
@@ -135,20 +144,22 @@ class Project
             $stmt = $this->conn->prepare("
                 SELECT id, title, status 
                 FROM tasks 
-                WHERE project_id = ?"
+                WHERE project_id = :id"
             );
-            $stmt->bind_param("i", $projectId);
+            $stmt->bindParam(':id', $projectId, PDO::PARAM_INT);
             $stmt->execute();
-            $result = $stmt->get_result();
-            return $result->fetch_all(MYSQLI_ASSOC);
-        } catch (Exception $e) {
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        } catch (PDOException $e) {
             error_log("Error fetching project tasks: " . $e->getMessage());
             return [];
         }
     }
 }
 
-$dbConnection = new mysqli('localhost', 'root', '', 'project_management');
+$dbConnection = new PDO('mysql:host=localhost;dbname=project_management', 'root', '');
+$dbConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 $sendProject = new Project($dbConnection);
 
 $viewProjects = new Project($dbConnection);
