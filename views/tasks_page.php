@@ -1,5 +1,5 @@
 <?php
-$project=$_GET['id_project'];
+$project = $_GET['id_project'];
 require_once('./models/tasks_model.php');
 require_once('./controllers/delete_task.php');
 
@@ -20,6 +20,23 @@ require_once('./controllers/delete_task.php');
 </head>
 
 <body>
+    <style>
+        .add-member {
+            /* position : absolute; */
+            top: 20px;
+            right: 80px;
+            width: 20px;
+            height: 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: black;
+            /* color: red; */
+            font-size: 1rem;
+            /* transition: color 0.3s ease;     */
+
+        }
+    </style>
     <nav>
         <div class="container nav-container">
             <a href="#" class="logo">ProManage</a>
@@ -66,6 +83,7 @@ require_once('./controllers/delete_task.php');
                                 ?>
                                 <div class="task-card" draggable="true">
                                     <div class="icons">
+
                                         <form method="POST" action="index.php?action=delete_task"
                                             onsubmit="return confirm('Are you sure you want to delete this project?');">
                                             <input type="hidden" name="project_id" value="<?= htmlspecialchars($task['id']) ?>">
@@ -79,7 +97,12 @@ require_once('./controllers/delete_task.php');
                                                 <i class="fa-regular fa-pen-to-square"></i>
                                             </button>
                                         </form>
+                                      
                                     </div>
+                                    <a href="" class="add-member">
+                                            <i class="fa-solid fa-user"></i>
+                                        </a>
+
                                     <h4><?= htmlspecialchars($task['name']) ?></h4>
                                     <!-- <span class="tag">urgent</span> -->
                                     <p><?= htmlspecialchars($task['description']) ?></p>
@@ -121,6 +144,9 @@ require_once('./controllers/delete_task.php');
                                             </button>
                                         </form>
                                     </div>
+                                    <a href="" class="add-member">
+                                        <i class="fa-solid fa-user"></i>
+                                    </a>
                                     <h4><?= htmlspecialchars($task['name']) ?></h4>
                                     <p><?= htmlspecialchars($task['description']) ?></p>
                                     <div class="task-meta">
@@ -159,7 +185,13 @@ require_once('./controllers/delete_task.php');
                                                 <i class="fa-regular fa-pen-to-square"></i>
                                             </button>
                                         </form>
+                                       
                                     </div>
+                                    <a href="" class="add-member" id="add-member">
+                                            <i class="fa-solid fa-user"></i>
+                                        </a>
+
+
                                     <h4><?= htmlspecialchars($task['name']) ?></h4>
                                     <p><?= htmlspecialchars($task['description']) ?></p>
                                     <div class="task-meta">
@@ -259,27 +291,27 @@ require_once('./controllers/delete_task.php');
 
     {{ ... }}
     </div>
-</main>
+    </main>
 
-<!-- Update Task Modal -->
-<div id="updateTaskModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h2>Update Task</h2>
-        <form id="updateTaskForm" method="POST" action="index.php?action=update_task">
-            <input type="hidden" id="update-task-id" name="task_id" value="">
-            
-            <div class="form-group">
-                <label for="update-task-name">Task Name</label>
-                <input type="text" id="update-task-name" name="task_name" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="update-task-description">Description</label>
-                <textarea id="update-task-description" name="task_description" rows="4"></textarea>
-            </div>
-            
-            <div class="form-group">
+    <!-- Update Task Modal -->
+    <div id="updateTaskModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Update Task</h2>
+            <form id="updateTaskForm" method="POST" action="index.php?action=update_task">
+                <input type="hidden" id="update-task-id" name="task_id" value="">
+
+                <div class="form-group">
+                    <label for="update-task-name">Task Name</label>
+                    <input type="text" id="update-task-name" name="task_name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="update-task-description">Description</label>
+                    <textarea id="update-task-description" name="task_description" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
                     <label for="type">Tag</label>
                     <select id="type" name="tag" multiple>
 
@@ -309,32 +341,65 @@ require_once('./controllers/delete_task.php');
                         ?>
                     </select>
                 </div>
-            
-            <div class="form-group">
-                <label for="update-task-status">Status</label>
-                <select id="update-task-status" name="task_status">
-                    <option value="ToDo">To Do</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Done">Done</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="update-task-start-date">Start Date</label>
-                <input type="date" id="update-task-start-date" name="task_start_date">
-            </div>
-            
-            <div class="form-group">
-                <label for="update-task-due-date">Due Date</label>
-                <input type="date" id="update-task-due-date" name="task_due_date">
-            </div>
-            
-            <button type="submit" class="update">Update Task</button>
-        </form>
-    </div>
-</div>
 
-<script src="./js/tasks.js" ></script>
+                <div class="form-group">
+                    <label for="update-task-status">Status</label>
+                    <select id="update-task-status" name="task_status">
+                        <option value="ToDo">To Do</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Done">Done</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="update-task-start-date">Start Date</label>
+                    <input type="date" id="update-task-start-date" name="task_start_date">
+                </div>
+
+                <div class="form-group">
+                    <label for="update-task-due-date">Due Date</label>
+                    <input type="date" id="update-task-due-date" name="task_due_date">
+                </div>
+
+                <button type="submit" class="update">Update Task</button>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+<!-- form to assign task  -->
+    <div id="form_to_assign">
+      <div id="assignTasksModal" class="assign_task_modal">
+      <div class="modal-content" id="modal-content">
+                <span class="close-modal">&times;</span>
+                <h2>Assign Projects and Members</h2>
+                <form id="assignTaskForm" method="POST">
+                    <div class="form-group">
+                        <label for="assign-member">Assign Member</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="email" id="assign-member" name="assign_member"
+                                placeholder="Enter member email">
+                            <button type="button" id="add-member-btn" class="btn-secondary" style="padding: 0.75rem;">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="member-list-container">
+                        <ul id="member-list" class="member-list"></ul>
+                    </div>
+
+                    <input type="submit" class="btn btn-primary" value="Assign">
+                </form>
+            </div>
+       </div>
+       </div>
+
+    <script src="./js/tasks.js"></script>
 
 </body>
+
 </html>

@@ -297,7 +297,7 @@
                 <div class="dashboard-card animate-fadeInUp" style="animation-delay: 0.3s;">
                     <h3>Completed Tasks</h3>
                     <div class="dashboard-card-content">
-                        <span class="dashboard-card-number"><?= $dashboardData['completed_tasks'] ?></span>
+                        <span class="dashboard-card-numbe<?= $dashboardData['completed_tasks'] ?>r"></span>
                         <i class="fas fa-check-circle dashboard-card-icon"></i>
                     </div>
                 </div>

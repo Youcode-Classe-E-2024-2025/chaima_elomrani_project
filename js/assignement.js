@@ -133,12 +133,21 @@ document.addEventListener('DOMContentLoaded', function () {
     const assignTaskForm = document.getElementById('assignTaskForm');
     const projectDetailsBtns = document.querySelectorAll('.project-details-btn');
 
+    let currentProjectId = null;
 
-    // assignTasksModal.style.display='none';
     // Open modal for each project's "Add Members" button
     projectDetailsBtns.forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.preventDefault(); // Prevent default link behavior
+            
+            // Get the project ID from the hidden input in the project card
+            const projectCard = this.closest('.project-card');
+            currentProjectId = projectCard.querySelector('input[name="project_id"]').value;
+            
+            // Reset member list
+            memberList.innerHTML = '';
+            
+            // Show modal
             assignTasksModal.style.display = 'block';
         });
     });
@@ -182,10 +191,11 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
 
         try {
-            // Get the current project's ID from the clicked "Add Members" button
-            const currentProjectBtn = document.querySelector('.project-details-btn:focus');
-            const projectCard = currentProjectBtn.closest('.project-card');
-            const projectId = projectCard.querySelector('input[name="project_id"]').value;
+            // Validate project ID
+            if (!currentProjectId) {
+                alert('No project selected. Please try again.');
+                return;
+            }
 
             const memberElements = document.querySelectorAll('#member-list li');
             const members = Array.from(memberElements).map(li => 
@@ -197,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            console.log('Sending data:', { projectId, members }); // Debug log
+            console.log('Sending data:', { projectId: currentProjectId, members }); // Debug log
 
             const response = await fetch('index.php?action=assign_members', {
                 method: 'POST',
@@ -205,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    projectId: projectId,
+                    projectId: currentProjectId,
                     members: members
                 })
             });
