@@ -9,19 +9,15 @@ $email = "";
 $password = "";
 $errors = [];
 
-// Initialize database connection
 $database = new Connexion();
 $connexion = $database->getconnexion();
 
-// Handle signup request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Sanitize and validate inputs
     $name = htmlspecialchars(trim($_POST['name'] ?? ''));
     $email = htmlspecialchars(trim($_POST['email'] ?? ''));
     $password = trim($_POST['password'] ?? '');
     $confirm_password = trim($_POST['confirm_password'] ?? '');
 
-    // Validation checks
     if (empty($name)) {
         $errors[] = "Name is required";
     }

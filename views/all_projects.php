@@ -545,12 +545,12 @@ require_once './models/projects_model.php';
             <div class="modal-content">
                 <span class="close-modal">&times;</span>
                 <h2>Assign Projects and Members</h2>
-                <form id="assignProjectForm" method="POST" >
+                <form id="assignProjectForm" method="POST">
                     <div class="form-group">
                         <label for="projectsSelect">Select Projects</label>
-                        <select id="projectsSelect" >
+                        <select id="projectsSelect">
                             <?php foreach ($projects as $project): ?>
-                                <option  value="<?php echo $project['id']; ?>">
+                                <option value="<?php echo $project['id']; ?>">
                                     <?php echo htmlspecialchars($project['name']); ?>
                                 </option>
                             <?php endforeach; ?>
@@ -560,7 +560,8 @@ require_once './models/projects_model.php';
                     <div class="form-group">
                         <label for="assign-member">Assign Member</label>
                         <div style="display: flex; gap: 0.5rem;">
-                            <input type="text" id="assign-member" name="assign_member" placeholder="Enter member email">
+                            <input type="email" id="assign-member" name="assign_member"
+                                placeholder="Enter member email">
                             <button type="button" id="add-member-btn" class="btn-secondary" style="padding: 0.75rem;">
                                 <i class="fas fa-plus"></i>
                             </button>
@@ -571,7 +572,7 @@ require_once './models/projects_model.php';
                         <ul id="member-list" class="member-list"></ul>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Assign</button>
+                    <input type="submit" class="btn btn-primary" value="Assign">
                 </form>
             </div>
         </div>
@@ -721,7 +722,7 @@ require_once './models/projects_model.php';
         });
     </script>
 
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function () {
             const assignProjectsBtn = document.getElementById('assignProjectsBtn');
             const assignProjectsModal = document.getElementById('assignProjectsModal');
@@ -765,9 +766,108 @@ require_once './models/projects_model.php';
                 assignProjectsModal.style.display = 'none';
             });
         });
+    </script> -->
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const assignProjectsBtn = document.getElementById('assignProjectsBtn');
+            const assignProjectsModal = document.getElementById('assignProjectsModal');
+            const closeModal = document.querySelector('.close-modal');
+
+            // Open modal
+            assignProjectsBtn.addEventListener('click', function () {
+                assignProjectsModal.style.display = 'block';
+            });
+
+            // Close modal
+            closeModal.addEventListener('click', function () {
+                assignProjectsModal.style.display = 'none';
+            });
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function (event) {
+                if (event.target === assignProjectsModal) {
+                    assignProjectsModal.style.display = 'none';
+                }
+            });
+
+            const addMemberBtn = document.getElementById('add-member-btn');
+            const memberInput = document.getElementById('assign-member');
+            const memberList = document.getElementById('member-list');
+
+            // Add member to list
+            addMemberBtn.addEventListener('click', function () {
+                const memberEmail = memberInput.value.trim();
+                if (memberEmail) {
+                    const li = document.createElement('li');
+                    li.textContent = memberEmail;
+                    memberList.appendChild(li);
+                    memberInput.value = '';
+                }
+            });
+
+            // Handle form submission
+            const assignProjectForm = document.getElementById('assignProjectForm');
+            assignProjectForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                try {
+                    const projectId = document.getElementById('projectsSelect').value;
+                    const memberElements = document.querySelectorAll('#member-list li');
+                    const members = Array.from(memberElements).map(li => li.textContent.trim());
+
+                    if (!projectId) {
+                        alert('Please select a project');
+                        return;
+                    }
+
+                    if (members.length === 0) {
+                        alert('Please add at least one member');
+                        return;
+                    }
+
+                    console.log('Sending data:', { projectId, members }); // Debug log
+
+                    const response = await fetch('index.php?action=assign_members', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            projectId: projectId,
+                            members: members
+                        })
+                    });
+
+                    // Check if response is OK
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('Server error:', errorText);
+                        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+                    }
+
+                    // Try to parse JSON
+                    const data = await response.json();
+
+                    if (data.success) {
+                        alert('Members assigned successfully!');
+                        assignProjectsModal.style.display = 'none';
+                        memberList.innerHTML = '';
+                        window.location.reload();
+                    } else {
+                        // Handle unsuccessful response
+                        throw new Error(data.message || 'Unknown error occurred');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error assigning members: ' + error.message);
+                }
+            });
+        });
     </script>
 
-    <script src="js/project.js"></script>
+    <script src="./js/project.js"></script>
 
 </body>
 

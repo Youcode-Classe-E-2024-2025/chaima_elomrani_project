@@ -1,5 +1,7 @@
 <?php
 require_once './config/connexion.php';
+require_once './controllers/projectMember.php';
+require_once './controllers/projectMember.php';
 
 class Project
 {

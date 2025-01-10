@@ -9,18 +9,23 @@ class Connexion
     private $conn;
 
     public function getconnexion() {
-        // Create mysqli connection
-        $this->conn = new mysqli($this->host, $this->username, $this->password, $this->db);
-
-        // Check connection
-        if ($this->conn->connect_error) {
-            throw new Exception("Database connection failed: " . $this->conn->connect_error);
+        try {
+            $pdo = new PDO(
+                "mysql:host=localhost;dbname=project_management",
+                "root",
+                "",
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+                ]
+            );
+            return $pdo;
+        } catch (PDOException $e) {
+            error_log("Erreur de connexion: " . $e->getMessage());
+            die("Erreur de connexion à la base de données");
         }
-
-        return $this->conn;
     }
 }
 
-// Create a global database connection
 $database = (new Connexion())->getconnexion();
 ?>

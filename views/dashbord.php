@@ -230,11 +230,27 @@
 </head>
 
 <body>
+    <?php
+    require_once('./controllers/dashboard_controller.php');
+    require_once('./config/session.php');
+
+    // Redirect if not logged in
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: index.php?page=login_page');
+        exit();
+    }
+
+    // Get dashboard data
+    $dashboardData = $dashboardController->getDashboardData();
+
+    // Get user's name (assuming it's stored in session)
+    $userName = $_SESSION['user_name'] ?? 'User';
+    ?>
     <nav>
         <div class="container nav-container">
             <div class="logo">ProManage</div>
             <div class="nav-links">
-            <a href="index.php?page=admin_home">Home</a>
+                <a href="index.php?page=admin_home">Home</a>
                 <a href="index.php?page=dashbord">Dashboard</a>
                 <a href="index.php?page=tasks_page">Tasks</a>
                 <a href="index.php?page=all_projects">All Projects</a>
@@ -253,12 +269,11 @@
             </div>
         </div>
     </nav>
-    </nav>
 
     <main>
         <div class="dashboard-header">
             <div class="container">
-                <h1 class="dashboard-title">Welcome back, John!</h1>
+                <h1 class="dashboard-title">Welcome back, <?= $userName ?>!</h1>
                 <p class="dashboard-subtitle">Here's an overview of your projects and tasks.</p>
             </div>
         </div>
@@ -268,21 +283,21 @@
                 <div class="dashboard-card animate-fadeInUp" style="animation-delay: 0.1s;">
                     <h3>Total Projects</h3>
                     <div class="dashboard-card-content">
-                        <span class="dashboard-card-number">12</span>
+                        <span class="dashboard-card-number"><?= $dashboardData['total_projects'] ?></span>
                         <i class="fas fa-project-diagram dashboard-card-icon"></i>
                     </div>
                 </div>
                 <div class="dashboard-card animate-fadeInUp" style="animation-delay: 0.2s;">
                     <h3>Active Tasks</h3>
                     <div class="dashboard-card-content">
-                        <span class="dashboard-card-number">28</span>
+                        <span class="dashboard-card-number"><?= $dashboardData['active_tasks'] ?></span>
                         <i class="fas fa-tasks dashboard-card-icon"></i>
                     </div>
                 </div>
                 <div class="dashboard-card animate-fadeInUp" style="animation-delay: 0.3s;">
                     <h3>Completed Tasks</h3>
                     <div class="dashboard-card-content">
-                        <span class="dashboard-card-number">64</span>
+                        <span class="dashboard-card-number"><?= $dashboardData['completed_tasks'] ?></span>
                         <i class="fas fa-check-circle dashboard-card-icon"></i>
                     </div>
                 </div>
@@ -320,7 +335,7 @@
                 labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                 datasets: [{
                     label: 'Tasks Completed',
-                    data: [12, 19, 3, 5, 2, 3, 7],
+                    data: <?= json_encode($dashboardData['tasks_completed']) ?>,
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1
                 }]

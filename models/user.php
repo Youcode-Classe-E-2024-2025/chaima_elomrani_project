@@ -3,18 +3,18 @@
 class User
 {
     private $conn;
-    private $table = 'users';
+    private $table = 'users'; 
 
     public $id;
     public $name;
     public $email;
     public $password;
-    public $role;
+    public $role; 
 
-    public function __construct(PDO $db)
+    public function __construct($db)
     {
         $this->conn = $db;
-        $this->role = 2;
+        $this->role = 2; 
     }
 
     private function validateInput()
@@ -117,23 +117,7 @@ class User
             ];
         }
 
+
+
     }
-
-    // public function logout(){
-    //     $this->conn->close();
-    //     return [
-    //         "status"=> true
-    //         ];
-
-    // }
-
-
-    // **************verifying the email *****************
-    public function checkEmail(){
-        $query = "SELECT email FROM users";
-        $result = $this->conn->prepare($query);
-        $result->execute();
-        $emails = [];
-
-    return $result->fetchAll(PDO::FETCH_ASSOC) ??  [];
 }
